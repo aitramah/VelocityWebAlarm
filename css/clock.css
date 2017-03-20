@@ -1,0 +1,12 @@
+#clock {
+    font-size: 700%;
+    text-align: center;
+    text-shadow: #8c8c8c;
+    text-shadow: 5px, 5px;
+}
+
+#date {
+    font-size: 120%;
+    text-align: center;
+    padding-top: 15%;
+}
