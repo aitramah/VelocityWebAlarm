@@ -1,0 +1,11 @@
+
+/* ---------- Fonts ---------- */
+@font-face {
+    font-family: Manifesto;
+    src: url(../font/manifesto.tff);
+}
+
+/* ---------- Navbar ---------- */
+.navbar-custom {
+    font-family: Manifesto;
+}
