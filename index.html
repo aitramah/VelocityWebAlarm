@@ -13,21 +13,39 @@
         <link href="css/bootstrap.min.css" rel="stylesheet">
         <link href="css/clock.css" rel="stylesheet">
         <link href="css/index.css" rel="stylesheet">
+        <link href="css/main.css" rel="stylesheet">
 
     </head>
     <body>
-    <nav class="navbar navbar-default navbar-static-top navbar-custom">
-        <div class="container">
-            <div class="navbar-header">
-                <a class="navbar-brand" href="#">VELOCITYALARM</a>
+        <nav class="navbar navbar-default navbar-static-top navbar-custom">
+            <div class="container">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">VELOCITYALARM</a>
+                </div>
             </div>
-        </div>
-    </nav>
-
+        </nav>
         <div class="container-fluid">
             <div class="row">
-                <p id="date">Sunday, January 1st, 2017</p>
-                <p id="clock">12:00:00</p>
+                <div id="clock-block" class="col-sm-8">
+                    <button id="add-alarm-button" type="button" class="btn btn-primary-transparent">
+                        <img id="add-alarm-button-image" src="images/test-new-alarm-button.png" >
+                    </button>
+                    <div id="date-and-clock">
+                        <p id="date">Sunday, January 1st, 2017</p>
+                        <p id="clock">12:00:00</p>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row">
+                        <h1>Alarm 1</h1>
+                    </div>
+                    <div class="row">
+                        <h1>Alarm 2</h1>
+                    </div>
+                    <div class="row">
+                        <h1>Alarm 3</h1>
+                    </div>
+                </div>
             </div>
 
 
