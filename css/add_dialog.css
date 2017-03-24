@@ -1,0 +1,17 @@
+add_dialog {
+    background-color: #0d686e;
+    box-shadow: 3px 3px 12px #050507;
+    width: 400px;
+    height: 400px;
+    padding: 100px;
+}
+
+#add_alarm_title {
+    font-size: 200%;
+    text-align: center;
+}
+
+text_field {
+    text-shadow: #8c8c8c;
+    text-shadow: 5px, 5px;
+}
