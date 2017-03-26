@@ -66,7 +66,3 @@ function padTime(i) {
     }
     return i;
 }
-
-document.getElementById("add-alarm-button").onclick = function() {
-    alert("STUB: Open New Alarm Fragmenet");
-};
