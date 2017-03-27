@@ -35,7 +35,7 @@
                         <p id="clock">12:00:00</p>
                     </div>
                 </div>
-                <div class="col-sm-4" id = "alarm-views">
+                <div class="col-sm-4" id="alarm-block">
                     <p>ALARMS</p>
                 </div>
             </div>
@@ -86,7 +86,7 @@
              place in the index document
 
              */
-            var alarmViews = document.getElementById('alarm-views');
+            var alarmViews = document.getElementById('alarm-block');
             var alarms = coordinator.getAlarms();
 
             // For each alarm held in the coordinator, create a view
