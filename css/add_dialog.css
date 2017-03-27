@@ -1,17 +1,52 @@
-.add_dialog {
-    background-color: white;
-    box-shadow: 3px 3px 12px #050507;
-    margin-left: auto;
-    margin-right: auto;
-    margin-top: -25%;
-    padding: 5px;
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Stay in place */
+    z-index: 1; /* Sit on top */
+    left: 0;
+    top: 0;
     height: 410px;
     width: 482px;
-    text-align: center;
-    /*next 2 lines are for bringing the dialog box to the front*/
-    z-index: 1;
-    position: relative;
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgb(0,0,0); /* Fallback color */
+    background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
 }
+
+/* Modal Content/Box */
+.modal-content {
+    background-color: #fefefe;
+    margin: 15% auto; /* 15% from the top and centered */
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%; /* Could be more or less, depending on screen size */
+}
+
+/* The Close Button */
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+/*#add_dialog {*/
+    /*background-color: white;*/
+    /*box-shadow: 3px 3px 12px #050507;*/
+    /*margin: auto;*/
+    /*padding: 5px;*/
+    /*height: 410px;*/
+    /*width: 482px;*/
+    /*text-align: center;*/
+    /*!*next 2 lines are for bringing the dialog box to the front*!*/
+    /*z-index: 1;*/
+    /*position: relative;*/
+/*}*/
 
 #add_alarm_title {
     font-size: 300%;
@@ -54,6 +89,7 @@
     font-family: Lato-Light;
     display: inline-block;
     padding-right: 10px;
+    position: relative;
 }
 
 #submit_style{
@@ -68,6 +104,7 @@
     width: 100px;
     height: 40px;
     text-align: center;
+    alignment: center;
 }
 
 #repeat_style{
@@ -82,4 +119,5 @@
     width: 80px;
     height: 30px;
     text-align: center;
+
 }
