@@ -1,5 +1,5 @@
 /**
- * Created by colinthompson on 2017-03-21.
+ * Created by colin thompson on 2017-03-21.
  */
 
 function Alarm(daysOfWeek, hour, min, frequency, name) {
