@@ -54,6 +54,10 @@ function AlarmCoordinator(){
                 if(alarmFrequency > 0){
                     newArray.push(tempAlarm);
                 }
+                // Create Alarm Object
+
+
+                // Alert
                 var alarmName = tempAlarm.getName();
                 alert("Alarm Going Off: " + alarmName);
             }
@@ -70,9 +74,9 @@ function AlarmCoordinator(){
         if(alarmList.length > 0){
             setInterval(this.checkAlarms, 5000); // Restart every 5 seconds
         }
+    };
 
-        AlarmCoordinator.prototype.getAlarms = function() {
-            return alarmList;
-        }
+    AlarmCoordinator.prototype.getAlarms = function() {
+        return alarmList;
     };
 }
