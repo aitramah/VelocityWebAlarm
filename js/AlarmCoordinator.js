@@ -5,12 +5,28 @@
 function AlarmCoordinator(){
     var alarmList = [];
 
+    /**
+     * Simple method designed to add an alarm to the alarmList. It
+     * also starts the checkAlarms method.
+     * @param alarm Alarm to be checked.
+     */
     AlarmCoordinator.prototype.addNewAlarm = function(alarm){
         alarmList.push(alarm);
-    }
+        this.checkAlarms();
+    };
 
+    /**
+     * Obtains the current time and traverses through the list of Alarms
+     * and checks if any of them are due to go off.
+     *
+     * Additionally, the method updates the alarmList with the alarms that are
+     * still scheduled to go off. The way it does this is by creating a temporary
+     * array, populating it with the alarms that are still scheduled, and then
+     * assigning it to alarmList before execution completes. The only time an alarm
+     * is not put in the updated list is if it is non-repeating and it is time
+     * for it to go off.
+     */
     AlarmCoordinator.prototype.checkAlarms = function() {
-        alert("Testing 1");
         var alarmLength = alarmList.length;
         var today = new Date();
         var newArray = [];
@@ -29,15 +45,17 @@ function AlarmCoordinator(){
             var alarmMinute = tempAlarm.getMinute();
             var alarmFrequency = tempAlarm.getFreq();
 
-            if(!alarmDays[weekday] || alarmHour != h) {
+            // Conditional statement that checks whether the day, hour, and minute are
+            // correct for the alarm to go off.
+            if(!alarmDays[weekday] || alarmHour !== h) {
                 newArray.push(tempAlarm);
-                continue;
             }
-            else if(m == alarmMinute){
+            else if(m === alarmMinute){
                 if(alarmFrequency > 0){
                     newArray.push(tempAlarm);
                 }
-                this.alarmGoingOff(i);
+                var alarmName = tempAlarm.getName();
+                alert("Alarm Going Off: " + alarmName);
             }
             else{
                 newArray.push(tempAlarm);
@@ -49,12 +67,8 @@ function AlarmCoordinator(){
         alarmList = newArray;
 
         // Restart the Function and check again
-        setTimeout(this.checkAlarms, 5000); // Restart every 5 seconds
-    }
-
-    AlarmCoordinator.prototype.alarmGoingOff = function(index){
-        var tempAlarm = alarmList[i];
-        var alarmName = tempAlarm.getName();
-        alert("Alarm Going Off: " + alarmName);
-    }
+        if(alarmList.length > 0){
+            setInterval(this.checkAlarms, 5000); // Restart every 5 seconds
+        }
+    };
 }

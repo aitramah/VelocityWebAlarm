@@ -56,6 +56,6 @@ function Alarm(daysOfWeek, hour, min, frequency, name) {
 var AlarmFrequency = {
     ONCE: 0,
     DAILY: 1,
-    WEEKLY: 2,
+    WEEKLY: 2
 };
 

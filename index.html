@@ -72,10 +72,10 @@
 
             $(document).ready(startTime());
 
-
-            // Hardcoded Alarm for Testing Purposes
+            /*
+            Hardcoded Alarm for Testing Purposes (Remove from Final Product)
+             */
             var sampleDaysOfWeek = [true, false, false, false, false, false, false];
-
             var sampleDate = new Date();
             var sampleHour = sampleDate.getHours();
             var sampleMin = sampleDate.getMinutes() + 1;
@@ -84,7 +84,6 @@
             // Set Up AlarmCoordinator and Load Sample Alarm
             var coordinator = new AlarmCoordinator();
             coordinator.addNewAlarm(sampleAlarm);
-            coordinator.checkAlarms();
 
         </script>
 
