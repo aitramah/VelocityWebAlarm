@@ -1,5 +1,5 @@
 /**
- * Created by colinthompson on 2017-03-20.
+ * Created by colin thompson on 2017-03-20.
  */
 const WEEKDAY = ['Sunday',
     'Monday',
@@ -37,8 +37,12 @@ function startTime() {
     m = padTime(m);
     s = padTime(s);
 
+    var suffix = h < 12 ? "am" : "pm";
+    h = h % 12;
+    if (h == 0) h = 12;
+
     $('#date').html(WEEKDAY[weekday] + ", " + MONTH[month] + " " + day + getDateSuffix(day) + ", " + year);
-    $('#clock').html(h + ":" + m + ":" + s);
+    $('#clock').html(h + ":" + m + ":" + s + " " + suffix);
     setTimeout(startTime, 500); // restart in half a second
 }
 
@@ -49,13 +53,13 @@ function startTime() {
  */
 function getDateSuffix(day) {
 
-    if (day == 11) return 'th'; //11 is an odd day lol
+    if (day === 11) return 'th'; //11 is an odd day lol
 
     var i = day % 10;
 
-    if (i == 1) return 'st';
-    else if (i == 2) return 'nd';
-    else if (i == 3) return 'rd';
+    if (i === 1) return 'st';
+    else if (i === 2) return 'nd';
+    else if (i === 3) return 'rd';
     else return 'th';
 }
 

@@ -1,5 +1,5 @@
 #clock {
-    font-family: EurostileRegular;
+    font-family: Eurostile;
     font-size: 700%;
     text-align: center;
     text-shadow: #8c8c8c;
@@ -8,7 +8,7 @@
 }
 
 #date {
-    font-family: EurostileRegular;
+    font-family: Eurostile;
     font-size: 120%;
     text-align: center;
     padding-top: 15%;
@@ -17,7 +17,8 @@
 
 #clock-block {
     position: relative;
-    height : 100vh;
+    height : 90vh;
+    border-right: 2px solid #cecece;
 }
 
 #date-and-clock {
@@ -27,6 +28,6 @@
     left: 0;
     right: 0;
     width: 50%;
-    height: 30%;
+    height: 60%;
     margin: auto;
 }

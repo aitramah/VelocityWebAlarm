@@ -1,13 +1,13 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
-    <title>Velocity Alarm</title>
-    <link rel="icon" href="favicon.ico">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  
+        <title>Velocity Alarm</title>
+        <link rel="icon" href="favicon.ico">
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
@@ -16,139 +16,129 @@
     <link href="css/index.css" rel="stylesheet">
     <link href="css/main.css" rel="stylesheet">
 
-</head>
-<body>
-<nav class="navbar navbar-default navbar-static-top navbar-custom">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">VELOCITYALARM</a>
-        </div>
-    </div>
-</nav>
+    </head>
 
-<div class="container-fluid">
-    <div class="row">
-        <div id="clock-block" class="col-sm-8">
-            <button id="add-alarm-button" type="button" class="btn btn-primary-transparent">
-                <img id="add-alarm-button-image" src="images/test-new-alarm-button.png">
-            </button>
-            <div id="date-and-clock">
-                <p id="date">Sunday, January 1st, 2017</p>
-                <p id="clock">12:00:00</p></div>
-        </div>
-        <div class="col-sm-4">
+    <body>
+        <nav class="navbar navbar-default navbar-static-top navbar-custom">
+            <div class="container-fluid">
+                <div class="navbar-header">
+                    <a class="navbar-brand" href="#">VELOCITYALARM</a>
+                </div>
+            </div>
+        </nav>
+        <div class="container-fluid">
             <div class="row">
-                <h1>Alarm 1</h1>
+                <div id="clock-block" class="col-sm-8">
+                    <button id="add-alarm-button" data-toggle="modal" data-target="#add-alarm-modal" type="button" class="btn btn-primary-transparent">
+                        <img id="add-alarm-button-image" src="images/test-new-alarm-button.png" >
+                    </button>
+                    <div id="date-and-clock">
+                        <p id="date">Sunday, January 1st, 2017</p>
+                        <p id="clock">12:00:00</p>
+                    </div>
+                </div>
+                <div class="col-sm-4" id="alarm-block">
+                    <p>ALARMS</p>
+                </div>
             </div>
-            <div class="row">
-                <h1>Alarm 2</h1>
-            </div>
-            <div class="row">
-                <h1>Alarm 3</h1>
-            </div>
+
+
         </div>
-    </div>
 
-</div>
-
-<div id="add_dialog" class="modal">
-    <div class="modal-content">
-        <span class="close">&times;</span>
-        <p id="add_alarm_title">Add Alarm</p>
-        <div style="display: table; text-align:left;">
-            <div style="display: table-row">
-                <div style="display: table-cell;">
-                    <p id="label">Label</p>
+        <!-- Add alarm dialog box
+        ================================================== -->
+        <div class="modal fade" id="add-alarm-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Alarm</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add stuff here Sharon</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Snooze</button>
+                        <button type="button" class="btn btn-primary">Dismiss</button>
+                    </div>
                 </div>
-                <input id="alarm_name" placeholder="Alarm Name">
-            </div>
-            <div style="display: table-row">
-                <div style="display: table-cell;">
-                    <p id="label">Time</p>
-                </div>
-                <div id="dropdown_style">
-                    <select>
-                        <option>Today</option>
-                        <option>Sunday</option>
-                        <option>Monday</option>
-                        <option>Tuesday</option>
-                        <option>Wednesday</option>
-                        <option>Thursday</option>
-                        <option>Friday</option>
-                        <option>Saturday</option>
-                    </select>
-                </div>
-                <div id="dropdown_style">
-                    <select>
-                        <option>Hour</option>
-                        <option>1</option>
-                        <option>2</option>
-                        <option>3</option>
-                        <option>4</option>
-                        <option>5</option>
-                        <option>6</option>
-                        <option>7</option>
-                        <option>8</option>
-                        <option>9</option>
-                        <option>10</option>
-                        <option>11</option>
-                        <option>12</option>
-                    </select>
-                </div>
-                <div id="dropdown_style">
-                    <select>
-                        <option>Minute</option>
-                        <option>5</option>
-                        <option>10</option>
-                        <option>15</option>
-                        <option>20</option>
-                        <option>25</option>
-                        <option>30</option>
-                        <option>35</option>
-                        <option>40</option>
-                        <option>45</option>
-                        <option>50</option>
-                        <option>55</option>
-                    </select>
-                </div>
-                <div id="dropdown_style">
-                    <select>
-                        <option>AM</option>
-                        <option>PM</option>
-                    </select>
-                </div>
-            </div>
-            <div style="display: table-row">
-                <div style="display: table-cell;">
-                    <p id="label">Repeat</p>
-                </div>
-                <button id="repeat_style">None</button>
-                <button id="repeat_style">Daily</button>
-                <button id="repeat_style">Weekly</button>
-            </div>
-            <div style="display: table-row">
-            <div style="display: table-cell;">
-            <button id="submit_style">Add</button>
-            </div>
-            </div>
+            </div>s
         </div>
-    </div>
-</div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-<script src="js/bootstrap.min.js"></script>
-<script src="js/clock.js"></script>
-<script src="js/addAlarm.js"></script>
+        <!-- Bootstrap core JavaScript
+        ================================================== -->
+        <!-- Placed at the end of the document so the pages load faster -->
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-<script>
+        <script src="js/bootstrap.min.js"></script>
+        <script src="js/clock.js"></script>
+        <script src="js/Alarm.js"></script>
+        <script src="js/AlarmCoordinator.js"></script>
+        <script src="js/HelperFunctions.js"></script>
 
-    $(document).ready(startTime());
+        <script>
 
-</script>
+            $(document).ready(startTime());
 
-</body>
+            $('#myModal').on('shown.bs.modal', function () {
+                $('#myInput').focus()
+            })
+
+            /*
+            Hardcoded Alarm for Testing Purposes (Remove from Final Product)
+             */
+            var sampleDaysOfWeek = [true, false, false, false, false, false, false];
+            var sampleDate = new Date();
+            var sampleHour = sampleDate.getHours();
+            var sampleMin = sampleDate.getMinutes() + 1;
+            var sampleAlarm = new Alarm(sampleDaysOfWeek, sampleHour, sampleMin, AlarmFrequency.ONCE, "Wake up baby");
+
+            // Set Up AlarmCoordinator and Load Sample Alarm
+            var coordinator = new AlarmCoordinator();
+            coordinator.addNewAlarm(sampleAlarm);
+
+
+            /*
+            By: Daniel Velasco
+
+             The following function grabs alarms from the AlarmCoordinator, creates an HTML
+             div for each with appropriate information, then appends them to the proper
+             place in the index document
+
+             */
+            var alarmViews = document.getElementById('alarm-block');
+            var alarms = coordinator.getAlarms();
+
+            // For each alarm held in the coordinator, create a view
+            for(var i = 0; i < alarms.length; i++) {
+                // This is the overarching single alarm view
+                var singleAlarmViewDiv = document.createElement('div');
+                singleAlarmViewDiv.className = 'row';
+
+                // Creating the alarm name element
+                var alarmNameHeader = document.createElement('H3');
+                var alarmName = document.createTextNode(alarms[i].getName());
+                alarmNameHeader.appendChild(alarmName);
+
+                // Creating the alarm time element
+                var alarmTimeHeader = document.createElement('H1');
+                var alarmTime = document.createTextNode(alarms[i].getHour()+":"+alarms[i].getMinute())
+                alarmTimeHeader.appendChild(alarmTime);
+
+                // Creating the frequency element
+                var frequencyParagraph = document.createElement('p');
+                var frequencyText = document.createTextNode(alarms[i].getFreq());
+                frequencyParagraph.appendChild(frequencyText);
+
+                singleAlarmViewDiv.appendChild(alarmNameHeader);
+                singleAlarmViewDiv.appendChild(alarmTimeHeader);
+                singleAlarmViewDiv.appendChild(frequencyParagraph);
+
+                alarmViews.appendChild(singleAlarmViewDiv);
+            }
+
+        </script>
+
+    </body>
 </html>
