@@ -1,35 +1,53 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
-
-    <title>Velocity Alarm</title>
-    <link rel="icon" href="favicon.ico">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- The above 3 meta tags *must* come first in the head; any other head content must come *after* these tags -->
+  
+        <title>Velocity Alarm</title>
+        <link rel="icon" href="favicon.ico">
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet">
     <link href="css/clock.css" rel="stylesheet">
     <link href="css/add_dialog.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
+    <link href="css/main.css" rel="stylesheet">
 
-</head>
-<body>
-<nav class="navbar navbar-default navbar-static-top navbar-custom">
-    <div class="container">
-        <div class="navbar-header">
-            <a class="navbar-brand" href="#">VELOCITYALARM</a>
+    </head>
+    <body>
+    <nav class="navbar navbar-default navbar-static-top navbar-custom">
+        <div class="container">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="#">VELOCITYALARM</a>
+            </div>
         </div>
-    </div>
-</nav>
+    </nav>
 
-<div class="container-fluid">
-    <div class="row">
-        <p id="date">Sunday, January 1st, 2017</p>
-        <p id="clock">12:00:00</p>
-    </div>
+        <div class="container-fluid">
+            <div class="row">
+                <div id="clock-block" class="col-sm-8">
+                    <button id="add-alarm-button" type="button" class="btn btn-primary-transparent">
+                        <img id="add-alarm-button-image" src="images/test-new-alarm-button.png" >
+                    </button>
+                    <div id="date-and-clock">
+                        <p id="date">Sunday, January 1st, 2017</p>
+                <p id="clock">12:00:00</p></div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="row">
+                        <h1>Alarm 1</h1>
+                    </div>
+                    <div class="row">
+                        <h1>Alarm 2</h1>
+                    </div>
+                    <div class="row">
+                        <h1>Alarm 3</h1>
+                    </div>
+                </div>
+            </div>
 
 </div>
 
@@ -116,22 +134,21 @@
             <!--</div>-->
         <!--</div>-->
     </div>
-</div>
+        </div>
 
-<!-- Bootstrap core JavaScript
-================================================== -->
-<!-- Placed at the end of the document so the pages load faster -->
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <!-- Bootstrap core JavaScript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
-<script src="js/bootstrap.min.js"></script>
-<script src="js/clock.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <script src="js/clock.js"></script>
 
-<script>
+    <script>
 
-    $(document).ready(startTime());
+        $(document).ready(startTime());
 
-</script>
+    </script>
 
-</body>
-
+    </body>
 </html>
