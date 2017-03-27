@@ -1,5 +1,5 @@
 /**
- * Created by colinthompson on 2017-03-20.
+ * Created by colin thompson on 2017-03-20.
  */
 const WEEKDAY = ['Sunday',
     'Monday',
