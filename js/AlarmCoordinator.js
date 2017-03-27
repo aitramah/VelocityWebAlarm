@@ -70,5 +70,9 @@ function AlarmCoordinator(){
         if(alarmList.length > 0){
             setInterval(this.checkAlarms, 5000); // Restart every 5 seconds
         }
+
+        AlarmCoordinator.prototype.getAlarms = function() {
+            return alarmList;
+        }
     };
 }
