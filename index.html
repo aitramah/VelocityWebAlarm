@@ -42,6 +42,7 @@
 
 
         </div>
+        <audio id="alarmFile" src="audio/alarm_sound.mp3" preload="auto"></audio>
 
         <script>
             document.getElementById("add-alarm-button").onclick = function() {
@@ -67,7 +68,7 @@
             /*
             Hardcoded Alarm for Testing Purposes (Remove from Final Product)
              */
-            var sampleDaysOfWeek = [true, false, false, false, false, false, false];
+            var sampleDaysOfWeek = [false, true, false, false, false, false, false];
             var sampleDate = new Date();
             var sampleHour = sampleDate.getHours();
             var sampleMin = sampleDate.getMinutes() + 1;

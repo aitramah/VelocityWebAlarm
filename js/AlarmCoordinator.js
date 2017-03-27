@@ -54,13 +54,15 @@ function AlarmCoordinator(){
                 if(alarmFrequency > 0){
                     newArray.push(tempAlarm);
                 }
-                // Create Alarm Object
-                var audio = document.createElement('audio');
-
+                // Create  and Play Audio Object
+                document.getElementById('alarmFile').play();
 
                 // Alert
                 var alarmName = tempAlarm.getName();
                 alert("Alarm Going Off: " + alarmName);
+
+                // Stop Audio Object
+                document.getElementById('alarmFile').pause();
             }
             else{
                 newArray.push(tempAlarm);
