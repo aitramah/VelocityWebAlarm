@@ -55,6 +55,7 @@ function AlarmCoordinator(){
                     newArray.push(tempAlarm);
                 }
                 // Create Alarm Object
+                var audio = document.createElement('audio');
 
 
                 // Alert
