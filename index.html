@@ -11,12 +11,18 @@
 
         <!-- Bootstrap core CSS -->
         <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!--Velocity Alarm CSS-->
         <link href="css/clock.css" rel="stylesheet">
         <link href="css/index.css" rel="stylesheet">
-        <link href="css/main.css" rel="stylesheet">
 
     </head>
+
     <body>
+
+<!-- Navbar
+================================================== -->
+
         <nav class="navbar navbar-default navbar-static-top navbar-custom">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -24,10 +30,16 @@
                 </div>
             </div>
         </nav>
+
+<!-- Main Body
+================================================== -->
+
         <div class="container-fluid">
             <div class="row">
+
+                <!--Clock-->
                 <div id="clock-block" class="col-sm-8">
-                    <button id="add-alarm-button" type="button" class="btn btn-primary-transparent">
+                    <button id="add-alarm-button" data-toggle="modal" data-target="#add-alarm-modal" type="button" class="btn btn-primary-transparent">
                         <img id="add-alarm-button-image" src="images/test-new-alarm-button.png" >
                     </button>
                     <div id="date-and-clock">
@@ -35,6 +47,7 @@
                         <p id="clock">12:00:00</p>
                     </div>
                 </div>
+                <!--Alarm List-->
                 <div class="col-sm-4" id="alarm-block">
                     <p>ALARMS</p>
                 </div>
@@ -44,15 +57,29 @@
         </div>
         <audio id="alarmFile" src="audio/alarm_sound.mp3" preload="auto"></audio>
 
-        <script>
-            document.getElementById("add-alarm-button").onclick = function() {
-                alert("STUB: Open New Alarm Fragment");
-            };
-        </script>
+<!-- Add alarm dialog box
+================================================== -->
+        <div class="modal fade" id="add-alarm-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Alarm</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add stuff here Sharon</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-primary">Add Alarm!</button>
+                    </div>
+                </div>
+            </div>s
+        </div>
 
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
+
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
         <script src="js/bootstrap.min.js"></script>
@@ -63,60 +90,16 @@
 
         <script>
 
+//          Start the clock
             $(document).ready(startTime());
 
-            /*
-            Hardcoded Alarm for Testing Purposes (Remove from Final Product)
-             */
-            var sampleDaysOfWeek = [false, true, false, false, false, false, false];
-            var sampleDate = new Date();
-            var sampleHour = sampleDate.getHours();
-            var sampleMin = sampleDate.getMinutes() + 1;
-            var sampleAlarm = new Alarm(sampleDaysOfWeek, sampleHour, sampleMin, AlarmFrequency.ONCE, "Wake up baby");
+//          Enable Modal
+            $('#myModal').on('shown.bs.modal', function () {
+                $('#myInput').focus()
+            })
 
-            // Set Up AlarmCoordinator and Load Sample Alarm
-            var coordinator = new AlarmCoordinator();
-            coordinator.addNewAlarm(sampleAlarm);
-
-
-            /*
-            By: Daniel Velasco
-
-             The following function grabs alarms from the AlarmCoordinator, creates an HTML
-             div for each with appropriate information, then appends them to the proper
-             place in the index document
-
-             */
-            var alarmViews = document.getElementById('alarm-block');
-            var alarms = coordinator.getAlarms();
-
-            // For each alarm held in the coordinator, create a view
-            for(var i = 0; i < alarms.length; i++) {
-                // This is the overarching single alarm view
-                var singleAlarmViewDiv = document.createElement('div');
-                singleAlarmViewDiv.className = 'row';
-
-                // Creating the alarm name element
-                var alarmNameHeader = document.createElement('H3');
-                var alarmName = document.createTextNode(alarms[i].getName());
-                alarmNameHeader.appendChild(alarmName);
-
-                // Creating the alarm time element
-                var alarmTimeHeader = document.createElement('H1');
-                var alarmTime = document.createTextNode(alarms[i].getHour()+":"+alarms[i].getMinute())
-                alarmTimeHeader.appendChild(alarmTime);
-
-                // Creating the frequency element
-                var frequencyParagraph = document.createElement('p');
-                var frequencyText = document.createTextNode(alarms[i].getFreq());
-                frequencyParagraph.appendChild(frequencyText);
-
-                singleAlarmViewDiv.appendChild(alarmNameHeader);
-                singleAlarmViewDiv.appendChild(alarmTimeHeader);
-                singleAlarmViewDiv.appendChild(frequencyParagraph);
-
-                alarmViews.appendChild(singleAlarmViewDiv);
-            }
+//          Setup Alarm List
+            setUp();
 
         </script>
 
