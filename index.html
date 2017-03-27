@@ -16,6 +16,7 @@
         <link href="css/main.css" rel="stylesheet">
 
     </head>
+
     <body>
         <nav class="navbar navbar-default navbar-static-top navbar-custom">
             <div class="container-fluid">
@@ -27,7 +28,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div id="clock-block" class="col-sm-8">
-                    <button id="add-alarm-button" type="button" class="btn btn-primary-transparent">
+                    <button id="add-alarm-button" data-toggle="modal" data-target="#add-alarm-modal" type="button" class="btn btn-primary-transparent">
                         <img id="add-alarm-button-image" src="images/test-new-alarm-button.png" >
                     </button>
                     <div id="date-and-clock">
@@ -43,11 +44,26 @@
 
         </div>
 
-        <script>
-            document.getElementById("add-alarm-button").onclick = function() {
-                alert("STUB: Open New Alarm Fragment");
-            };
-        </script>
+        <!-- Add alarm dialog box
+        ================================================== -->
+        <div class="modal fade" id="add-alarm-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Alarm</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add stuff here Sharon</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Snooze</button>
+                        <button type="button" class="btn btn-primary">Dismiss</button>
+                    </div>
+                </div>
+            </div>s
+        </div>
+
 
         <!-- Bootstrap core JavaScript
         ================================================== -->
@@ -63,6 +79,10 @@
         <script>
 
             $(document).ready(startTime());
+
+            $('#myModal').on('shown.bs.modal', function () {
+                $('#myInput').focus()
+            })
 
             /*
             Hardcoded Alarm for Testing Purposes (Remove from Final Product)
