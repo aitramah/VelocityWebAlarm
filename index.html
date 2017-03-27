@@ -64,10 +64,27 @@
 
         <script src="js/bootstrap.min.js"></script>
         <script src="js/clock.js"></script>
+        <script src="js/Alarm.js"></script>
+        <script src="js/AlarmCoordinator.js"></script>
+        <script src="js/HelperFunctions.js"></script>
 
         <script>
 
             $(document).ready(startTime());
+
+
+            // Hardcoded Alarm for Testing Purposes
+            var sampleDaysOfWeek = [true, false, false, false, false, false, false];
+
+            var sampleDate = new Date();
+            var sampleHour = sampleDate.getHours();
+            var sampleMin = sampleDate.getMinutes() + 1;
+            var sampleAlarm = new Alarm(sampleDaysOfWeek, sampleHour, sampleMin, AlarmFrequency.ONCE, "Alarm X");
+
+            // Set Up AlarmCoordinator and Load Sample Alarm
+            var coordinator = new AlarmCoordinator();
+            coordinator.addNewAlarm(sampleAlarm);
+            coordinator.checkAlarms();
 
         </script>
 
