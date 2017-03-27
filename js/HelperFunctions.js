@@ -28,7 +28,7 @@ function setUp() {
     /*
      Hardcoded Alarm for Testing Purposes (Remove from Final Product)
      */
-    var sampleDaysOfWeek = [true, false, false, false, false, false, false];
+    var sampleDaysOfWeek = [false, true, false, false, false, false, false];
     var sampleDate = new Date();
     var sampleHour = sampleDate.getHours();
     var sampleMin = sampleDate.getMinutes() + 1;

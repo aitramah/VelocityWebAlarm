@@ -51,18 +51,28 @@ function AlarmCoordinator(){
                 newArray.push(tempAlarm);
             }
             else if(m === alarmMinute){
+                // TODO this is broken and needs to be fixed for daily and weekly to work properly
                 if(alarmFrequency > 0){
                     newArray.push(tempAlarm);
                 }
                 // Create  and Play Audio Object
                 document.getElementById('alarmFile').play();
 
-                // Alert
+                // Name Editing
                 var alarmName = tempAlarm.getName();
-                alert("Alarm Going Off: " + alarmName);
+                document.getElementById("alarmDialogueName").innerHTML = alarmName;
+
+                // Modal
+                $('#alarmDialogueModal').modal({
+                    show: true
+                });
 
                 // Stop Audio Object
-                document.getElementById('alarmFile').pause();
+                document.getElementById("alarmDialogueButton").onclick = function() {
+                    $('#alarmDialogueModal').modal('toggle');
+                    document.getElementById('alarmFile').pause();
+                }
+
             }
             else{
                 newArray.push(tempAlarm);
