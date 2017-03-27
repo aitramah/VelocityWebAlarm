@@ -16,6 +16,7 @@
         <link href="css/main.css" rel="stylesheet">
 
     </head>
+
     <body>
         <nav class="navbar navbar-default navbar-static-top navbar-custom">
             <div class="container-fluid">
@@ -27,7 +28,7 @@
         <div class="container-fluid">
             <div class="row">
                 <div id="clock-block" class="col-sm-8">
-                    <button id="add-alarm-button" type="button" class="btn btn-primary-transparent">
+                    <button id="add-alarm-button" data-toggle="modal" data-target="#add-alarm-modal" type="button" class="btn btn-primary-transparent">
                         <img id="add-alarm-button-image" src="images/test-new-alarm-button.png" >
                     </button>
                     <div id="date-and-clock">
@@ -43,11 +44,26 @@
 
         </div>
 
-        <script>
-            document.getElementById("add-alarm-button").onclick = function() {
-                alert("STUB: Open New Alarm Fragment");
-            };
-        </script>
+        <!-- Add alarm dialog box
+        ================================================== -->
+        <div class="modal fade" id="add-alarm-modal" tabindex="-1" role="dialog">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                        <h4 class="modal-title">Alarm</h4>
+                    </div>
+                    <div class="modal-body">
+                        <p>Add stuff here Sharon</p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-default" data-dismiss="modal">Snooze</button>
+                        <button type="button" class="btn btn-primary">Dismiss</button>
+                    </div>
+                </div>
+            </div>s
+        </div>
+
 
         <!-- Bootstrap core JavaScript
         ================================================== -->
@@ -63,6 +79,63 @@
         <script>
 
             $(document).ready(startTime());
+
+            $('#myModal').on('shown.bs.modal', function () {
+                $('#myInput').focus()
+            })
+
+            /*
+            Hardcoded Alarm for Testing Purposes (Remove from Final Product)
+             */
+            var sampleDaysOfWeek = [true, false, false, false, false, false, false];
+            var sampleDate = new Date();
+            var sampleHour = sampleDate.getHours();
+            var sampleMin = sampleDate.getMinutes() + 1;
+            var sampleAlarm = new Alarm(sampleDaysOfWeek, sampleHour, sampleMin, AlarmFrequency.ONCE, "Wake up baby");
+
+            // Set Up AlarmCoordinator and Load Sample Alarm
+            var coordinator = new AlarmCoordinator();
+            coordinator.addNewAlarm(sampleAlarm);
+
+
+            /*
+            By: Daniel Velasco
+
+             The following function grabs alarms from the AlarmCoordinator, creates an HTML
+             div for each with appropriate information, then appends them to the proper
+             place in the index document
+
+             */
+            var alarmViews = document.getElementById('alarm-block');
+            var alarms = coordinator.getAlarms();
+
+            // For each alarm held in the coordinator, create a view
+            for(var i = 0; i < alarms.length; i++) {
+                // This is the overarching single alarm view
+                var singleAlarmViewDiv = document.createElement('div');
+                singleAlarmViewDiv.className = 'row';
+
+                // Creating the alarm name element
+                var alarmNameHeader = document.createElement('H3');
+                var alarmName = document.createTextNode(alarms[i].getName());
+                alarmNameHeader.appendChild(alarmName);
+
+                // Creating the alarm time element
+                var alarmTimeHeader = document.createElement('H1');
+                var alarmTime = document.createTextNode(alarms[i].getHour()+":"+alarms[i].getMinute())
+                alarmTimeHeader.appendChild(alarmTime);
+
+                // Creating the frequency element
+                var frequencyParagraph = document.createElement('p');
+                var frequencyText = document.createTextNode(alarms[i].getFreq());
+                frequencyParagraph.appendChild(frequencyText);
+
+                singleAlarmViewDiv.appendChild(alarmNameHeader);
+                singleAlarmViewDiv.appendChild(alarmTimeHeader);
+                singleAlarmViewDiv.appendChild(frequencyParagraph);
+
+                alarmViews.appendChild(singleAlarmViewDiv);
+            }
             setUp();
 
         </script>
