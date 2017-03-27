@@ -8,3 +8,8 @@
 .navbar-custom {
     font-family: Manifesto;
 }
+
+/* ---------- Add Alarm Modal ---------- */
+.modal {
+    margin-top: 15%;
+}
