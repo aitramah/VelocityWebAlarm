@@ -25,10 +25,23 @@
 }
 
 #alarm-block {
-    padding-left: 40px;
+    padding-left: 0px;
+    padding-right: 0px;
 }
 
 .btn-primary-transparent {
     background-color: transparent;
     border-color: transparent;
+}
+
+#alarm-header {
+    padding-left: 8px;
+}
+
+.label {
+    margin-right: 4px;
+}
+
+.alarmListX {
+
 }

@@ -51,6 +51,11 @@ function Alarm(daysOfWeek, hour, min, frequency, name) {
         frequency = freq;
     };
 
+    Alarm.prototype.getUUID = function () {
+        return uuid;
+    };
+
+
 }
 
 var AlarmFrequency = {

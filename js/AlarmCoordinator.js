@@ -24,7 +24,6 @@ var  AlarmCoordinator = (function() {
      */
     AlarmCoordinator.prototype.addNewAlarm = function(alarm){
         alarmList.push(alarm);
-        alert("Added Alarm");
         setTimeout(this.checkAlarms, 500);
     };
 
@@ -41,7 +40,6 @@ var  AlarmCoordinator = (function() {
      */
     AlarmCoordinator.prototype.checkAlarms = function() {
 
-        // alert("ajkdsfljlk");
         var alarmLength = alarmList.length;
         var today = new Date();
         var newArray = [];
@@ -71,6 +69,8 @@ var  AlarmCoordinator = (function() {
                 }
                 var alarmName = tempAlarm.getName();
                 alert("Alarm Going Off: " + alarmName);
+                removeElementFromAlarmList(tempAlarm.getUUID())
+
             }
             else{
                 newArray.push(tempAlarm);
