@@ -57,6 +57,7 @@ var  AlarmCoordinator = (function() {
             var alarmHour = tempAlarm.getHour();
             var alarmMinute = tempAlarm.getMinute();
             var alarmFrequency = tempAlarm.getFreq();
+            var dayFlags = tempAlarm.getDayFlags();
 
             // Conditional statement that checks whether the day, hour, and minute are
             // correct for the alarm to go off.
@@ -65,10 +66,33 @@ var  AlarmCoordinator = (function() {
             }
             else if(m === alarmMinute){
                 if(alarmFrequency > 0){
-                    newArray.push(tempAlarm);
+                    if(dayFlags[weekday]){
+                        continue;
+                    }
+                    else {
+                        tempAlarm.setDayFlags(weekday);
+                        newArray.push(tempAlarm);
+                    }
                 }
+
+                // Create  and Play Audio Object
+                document.getElementById('alarmFile').play();
+
+                // Name Editing
                 var alarmName = tempAlarm.getName();
-                alert("Alarm Going Off: " + alarmName);
+                document.getElementById("alarmDialogueName").innerHTML = alarmName;
+
+                // Modal
+                $('#alarmDialogueModal').modal({
+                    show: true
+                });
+
+                // Stop Audio Object
+                document.getElementById("alarmDialogueButton").onclick = function() {
+                    $('#alarmDialogueModal').modal('toggle');
+                    document.getElementById('alarmFile').pause();
+                }
+
                 removeElementFromAlarmList(tempAlarm.getUUID())
 
             }
