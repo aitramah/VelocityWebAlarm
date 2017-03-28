@@ -28,7 +28,7 @@ function setUp() {
     /*
      Hardcoded Alarm for Testing Purposes (Remove from Final Product)
      */
-    var sampleDaysOfWeek = [true, false, false, false, false, false, false];
+    var sampleDaysOfWeek = [false, true, false, false, false, false, false];
     var sampleDate = new Date();
     var sampleHour = sampleDate.getHours();
     var sampleMin = sampleDate.getMinutes() + 1;
@@ -37,6 +37,7 @@ function setUp() {
     // Set Up AlarmCoordinator and Load Sample Alarm
     var coordinator = new AlarmCoordinator();
     coordinator.addNewAlarm(sampleAlarm);
+
 
 
     /*
@@ -63,7 +64,7 @@ function setUp() {
 
         // Creating the alarm time element
         var alarmTimeHeader = document.createElement('H1');
-        var alarmTime = document.createTextNode(alarms[i].getHour()+":"+alarms[i].getMinute())
+        var alarmTime = document.createTextNode(alarms[i].getHour()+":"+padTime(alarms[i].getMinute()));
         alarmTimeHeader.appendChild(alarmTime);
 
         // Creating the frequency element
