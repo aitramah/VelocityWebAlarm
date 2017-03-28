@@ -44,6 +44,7 @@ function AlarmCoordinator(){
             var alarmHour = tempAlarm.getHour();
             var alarmMinute = tempAlarm.getMinute();
             var alarmFrequency = tempAlarm.getFreq();
+            var dayFlags = tempAlarm.getDayFlags();
 
             // Conditional statement that checks whether the day, hour, and minute are
             // correct for the alarm to go off.
@@ -51,13 +52,16 @@ function AlarmCoordinator(){
                 newArray.push(tempAlarm);
             }
             else if(m === alarmMinute){
-                // TODO this is broken and needs to be fixed for daily and weekly to work properly
-                // Potentially, give repeating alarms a field of flags that record if that
-                // alarm went off today. If no, set its flag to true. All flags that are for
-                // different days of the week are automatically set to false.
                 if(alarmFrequency > 0){
-                    newArray.push(tempAlarm);
+                    if(dayFlags[weekday]){
+                        continue;
+                    }
+                    else {
+                        tempAlarm.setDayFlags(weekday);
+                        newArray.push(tempAlarm);
+                    }
                 }
+
                 // Create  and Play Audio Object
                 document.getElementById('alarmFile').play();
 
