@@ -64,7 +64,7 @@ $(document).ready(function () {
 
     // Initialize Minutes of Dropdown
     $(function () {
-        for (var i = 0; i <= 60; i++) {
+        for (var i = 0; i <= 59; i++) {
             $('#select-min').append($('<option></option>').val(i).html(padTime(i)));
         }
     });
@@ -136,6 +136,7 @@ $('#submit-alarm').click(function () {
 
 //This should work but it doesn't!!!
 $("[name='closebutton']").click(function () {
+    alert("test");
     removeElementFromAlarmList($(this).parent().attr('id'));
 
 });
