@@ -4,26 +4,6 @@
  */
 
 /**
- * A general set up upon opening of the web app
- */
-function setUp() {
-    /*
-     Hardcoded Alarm for Testing Purposes (Remove from Final Product)
-     */
-    var sampleDaysOfWeek = [false, true, true, true, false, false, false];
-    var sampleDate = new Date();
-    var sampleHour = sampleDate.getHours();
-    var sampleMin = sampleDate.getMinutes() + 1;
-    var sampleAlarm = new Alarm(sampleDaysOfWeek, sampleHour, sampleMin, AlarmFrequency.WEEKLY, "Wake up baby");
-
-    // Set Up AlarmCoordinator and Load Sample Alarm
-    var coordinator = new AlarmCoordinator();
-    coordinator.addNewAlarm(sampleAlarm);
-    populateListUIFromArray(coordinator.getAlarms());
-
-}
-
-/**
  * Using an array of alarms, populates the alarm list panel.
  * @param alarms - A list of alarms to append
  */

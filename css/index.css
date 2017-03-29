@@ -9,6 +9,10 @@
     font-family: Manifesto;
 }
 
+.navbar {
+    margin-bottom: 0px;
+}
+
 /* ---------- Add Alarm Modal ---------- */
 .modal {
     margin-top: 15%;
@@ -30,6 +34,7 @@
 /* ---------- Add Alarm List and Button ---------- */
 #add-alarm-button {
     float : right;
+    margin-top: 10px;
 }
 
 #add-alarm-button-image {
@@ -53,6 +58,11 @@
 
 .label {
     margin-right: 4px;
+}
+
+.panel {
+    border-left: 0px;
+    border-radius: 0px;
 }
 
 .alarmListX {
