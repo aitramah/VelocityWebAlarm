@@ -9,6 +9,7 @@ function Alarm(daysOfWeek, hour, min, frequency, name) {
     var min = min; //The minute to go off (0 - 59)
     var frequency = frequency; //How frequently the alarm goes off (once, daily, weekly) (if daily bitmask should be all ones)
     var name = name; //The name of the alarm
+    var dayFlags = [false, false, false, false, false, false, false];
 
 
     Alarm.prototype.getDaysOfWeek = function () {
@@ -51,6 +52,21 @@ function Alarm(daysOfWeek, hour, min, frequency, name) {
         frequency = freq;
     };
 
+    Alarm.prototype.getUUID = function () {
+        return uuid;
+    };
+
+
+    Alarm.prototype.getDayFlags = function() {
+        return dayFlags;
+    };
+
+    Alarm.prototype.setDayFlags = function(dayIndex) {
+        for(i = 0; i < dayFlags.length; i++){
+            dayFlags[i] = false;
+        }
+        dayFlags[dayIndex] = true;
+    }
 }
 
 var AlarmFrequency = {

@@ -9,16 +9,20 @@
         <title>Velocity Alarm</title>
         <link rel="icon" href="favicon.ico">
 
-    <!-- Bootstrap core CSS -->
-    <link href="css/bootstrap.min.css" rel="stylesheet">
-    <link href="css/clock.css" rel="stylesheet">
-    <link href="css/add_dialog.css" rel="stylesheet">
-    <link href="css/index.css" rel="stylesheet">
-    <link href="css/main.css" rel="stylesheet">
+        <!-- Bootstrap core CSS -->
+        <link href="css/bootstrap.min.css" rel="stylesheet">
+
+        <!--Velocity Alarm CSS-->
+        <link href="css/clock.css" rel="stylesheet">
+        <link href="css/index.css" rel="stylesheet">
 
     </head>
 
     <body>
+
+<!-- Navbar
+================================================== -->
+
         <nav class="navbar navbar-default navbar-static-top navbar-custom">
             <div class="container-fluid">
                 <div class="navbar-header">
@@ -26,9 +30,15 @@
                 </div>
             </div>
         </nav>
+
+<!-- Main Body
+================================================== -->
+
         <div class="container-fluid">
             <div class="row">
-                <div id="clock-block" class="col-sm-8">
+
+                <!--Clock-->
+                <div id="clock-block" class="col-md-8">
                     <button id="add-alarm-button" data-toggle="modal" data-target="#add-alarm-modal" type="button" class="btn btn-primary-transparent">
                         <img id="add-alarm-button-image" src="images/test-new-alarm-button.png" >
                     </button>
@@ -37,105 +47,150 @@
                         <p id="clock">12:00:00</p>
                     </div>
                 </div>
-                <div class="col-sm-4" id="alarm-block">
-                    <p>ALARMS</p>
+                <!--Alarm List-->
+                <div class="col-md-4" id="alarm-block">
+                    <div class="panel panel-default">
+                        <!-- Default panel contents -->
+                        <div class="panel-heading"><h2>Alarm List</h2></div>
+                        <!-- List group -->
+                        <ul class="list-group" id="alarm-list">
+                        </ul>
+                    </div>
                 </div>
             </div>
 
 
         </div>
+        <audio id="alarmFile" src="audio/alarm_sound.mp3" preload="auto"></audio>
 
-        <!-- Add alarm dialog box
-        ================================================== -->
+<!-- Add alarm dialog box
+================================================== -->
         <div class="modal fade" id="add-alarm-modal" tabindex="-1" role="dialog">
             <div class="modal-dialog" role="document">
                 <div class="modal-content">
                     <div class="modal-header">
                         <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                        <h1 class="modal-title">Add Alarm</h1>
+                        <h4 class="modal-title">Add Alarm</h4>
                     </div>
-                    <div class="modal-body">
-                        <p>Add stuff here Sharon</p>
+                    <div class="modal-body" id="add-alarm-body">
+
+                        <div class="row">
+                            <div class="form-group" id="alarm-name-form-group">
+                                <label for="inputAlarmName">Alarm Name</label>
+                                <input type="text" class="form-control" id="inputAlarmName" placeholder="Name Your Alarm!">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-3">
+                                <label for="select-hour">Hour</label>
+                                <select class="form-control" id="select-hour">
+                                    <!--Initialized In UI-->
+                                </select>
+                            </div>
+                            <div class="col-xs-3">
+                                <label for="select-min">Minute</label>
+                                <select class="form-control" id="select-min">
+                                    <!--Initialized In UI-->
+                                </select>
+
+                            </div>
+                            <div class="col-xs-3">
+                                <label for="select-min">Am/Pm</label>
+                                <select class="form-control" id="select-ampm">
+                                    <option>AM</option>
+                                    <option>PM</option>
+                                </select>
+                            </div>
+                            <div class="col-xs-3">
+                                <label for="select-min">Frequency</label>
+                                <select class="form-control" id="select-freq">
+                                    <option>Once</option>
+                                    <option>Daily</option>
+                                    <option>Weekly</option>
+                                </select>
+                            </div>
+                        </div>
+                        <label id="weekly-label" class="hidden" for="daysInput" style="margin-top: 10px">Day(s) of Week</label>
+                        <hr id="weekly-line" class="hidden" style="margin-top: 2px; margin-bottom: 10px">
+                        <div class="container hidden" id="daysInput">
+                            <div class="row">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="weekday" id="inlineCheckbox1" value="0">Sunday
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="weekday" id="inlineCheckbox2" value="1">Monday
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="weekday" id="inlineCheckbox3" value="2">Tuesday
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="weekday" id="inlineCheckbox4" value="3">Wednesday
+                                </label>
+                            </div>
+                            <div class="row">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="weekday" id="inlineCheckbox5" value="4">Thursday
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="weekday" id="inlineCheckbox6" value="5">Friday
+                                </label>
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" name="weekday" id="inlineCheckbox7" value="6">Saturday
+                                </label>
+                            </div>
+                        </div>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Add</button>
+                        <button type="button" class="btn btn-primary" id="submit-alarm">Add Alarm!</button>
                     </div>
                 </div>
             </div>s
         </div>
 
+<!-- Alarm Dialogue
+================================================== -->
+<div class="modal fade bs-example-modal-sm" id="alarmDialogueModal" tabindex="-1" role="dialog">
+    <div class="modal-dialog modal-sm" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title">Alarm Going Off!</h4>
+            </div>
+            <div class="modal-body">
+                <p id="alarmDialogueName">*Alarm Name*</p>
+            </div>
+            <div class="modal-footer">
+                <button type="button" id="alarmDialogueButton" class="btn btn-primary">Dismiss</button>
+            </div>
+        </div>
+    </div>
+</div>
 
-        <!-- Bootstrap core JavaScript
-        ================================================== -->
-        <!-- Placed at the end of the document so the pages load faster -->
+<!-- Bootstrap core JavaScript
+================================================== -->
+<!-- Placed at the end of the document so the pages load faster -->
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 
+        <!--Bootstrap Dependencies-->
         <script src="js/bootstrap.min.js"></script>
+
+        <!--Custom JS-->
         <script src="js/clock.js"></script>
         <script src="js/Alarm.js"></script>
         <script src="js/AlarmCoordinator.js"></script>
         <script src="js/HelperFunctions.js"></script>
+        <script src="js/ui.js"></script>
 
         <script>
 
+//          Start the clock
             $(document).ready(startTime());
+            $(document).ready((new AlarmCoordinator).checkAlarms());
 
+//          Enable Modal
             $('#myModal').on('shown.bs.modal', function () {
                 $('#myInput').focus()
-            })
-
-            /*
-            Hardcoded Alarm for Testing Purposes (Remove from Final Product)
-             */
-            var sampleDaysOfWeek = [true, false, false, false, false, false, false];
-            var sampleDate = new Date();
-            var sampleHour = sampleDate.getHours();
-            var sampleMin = sampleDate.getMinutes() + 1;
-            var sampleAlarm = new Alarm(sampleDaysOfWeek, sampleHour, sampleMin, AlarmFrequency.ONCE, "Wake up baby");
-
-            // Set Up AlarmCoordinator and Load Sample Alarm
-            var coordinator = new AlarmCoordinator();
-            coordinator.addNewAlarm(sampleAlarm);
-
-
-            /*
-            By: Daniel Velasco
-
-             The following function grabs alarms from the AlarmCoordinator, creates an HTML
-             div for each with appropriate information, then appends them to the proper
-             place in the index document
-
-             */
-            var alarmViews = document.getElementById('alarm-block');
-            var alarms = coordinator.getAlarms();
-
-            // For each alarm held in the coordinator, create a view
-            for(var i = 0; i < alarms.length; i++) {
-                // This is the overarching single alarm view
-                var singleAlarmViewDiv = document.createElement('div');
-                singleAlarmViewDiv.className = 'row';
-
-                // Creating the alarm name element
-                var alarmNameHeader = document.createElement('H3');
-                var alarmName = document.createTextNode(alarms[i].getName());
-                alarmNameHeader.appendChild(alarmName);
-
-                // Creating the alarm time element
-                var alarmTimeHeader = document.createElement('H1');
-                var alarmTime = document.createTextNode(alarms[i].getHour()+":"+alarms[i].getMinute())
-                alarmTimeHeader.appendChild(alarmTime);
-
-                // Creating the frequency element
-                var frequencyParagraph = document.createElement('p');
-                var frequencyText = document.createTextNode(alarms[i].getFreq());
-                frequencyParagraph.appendChild(frequencyText);
-
-                singleAlarmViewDiv.appendChild(alarmNameHeader);
-                singleAlarmViewDiv.appendChild(alarmTimeHeader);
-                singleAlarmViewDiv.appendChild(frequencyParagraph);
-
-                alarmViews.appendChild(singleAlarmViewDiv);
-            }
+            });
 
         </script>
 

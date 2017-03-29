@@ -2,8 +2,23 @@
  * Intended to check alarms to see if they are ready to go off.
  * Created by Aidan on 2017-03-26.
  */
-function AlarmCoordinator(){
+
+const DEFAULT_ALARM_NAME = "Generic Alarm Name";
+
+var  AlarmCoordinator = (function() {
+    var instance;
     var alarmList = [];
+
+
+    /**
+     * Constructor which returns a Singleton
+     *
+     */
+    function AlarmCoordinator() {
+        if (typeof instance != "undefined") return instance;
+
+        instance = this;
+    }
 
     /**
      * Simple method designed to add an alarm to the alarmList. It
@@ -12,7 +27,7 @@ function AlarmCoordinator(){
      */
     AlarmCoordinator.prototype.addNewAlarm = function(alarm){
         alarmList.push(alarm);
-        this.checkAlarms();
+        setTimeout(this.checkAlarms, 500);
     };
 
     /**
@@ -27,6 +42,7 @@ function AlarmCoordinator(){
      * for it to go off.
      */
     AlarmCoordinator.prototype.checkAlarms = function() {
+
         var alarmLength = alarmList.length;
         var today = new Date();
         var newArray = [];
@@ -44,6 +60,7 @@ function AlarmCoordinator(){
             var alarmHour = tempAlarm.getHour();
             var alarmMinute = tempAlarm.getMinute();
             var alarmFrequency = tempAlarm.getFreq();
+            var dayFlags = tempAlarm.getDayFlags();
 
             // Conditional statement that checks whether the day, hour, and minute are
             // correct for the alarm to go off.
@@ -52,10 +69,37 @@ function AlarmCoordinator(){
             }
             else if(m === alarmMinute){
                 if(alarmFrequency > 0){
-                    newArray.push(tempAlarm);
+                    if(dayFlags[weekday]){
+                        continue;
+                    }
+                    else {
+                        tempAlarm.setDayFlags(weekday);
+                        newArray.push(tempAlarm);
+                    }
                 }
+
+                // Create  and Play Audio Object
+                document.getElementById('alarmFile').play();
+
+                // Name Editing
                 var alarmName = tempAlarm.getName();
-                alert("Alarm Going Off: " + alarmName);
+                document.getElementById("alarmDialogueName").innerHTML = alarmName;
+
+                // Modal
+                $('#alarmDialogueModal').modal({
+                    show: true
+                });
+
+                // Stop Audio Object
+                document.getElementById("alarmDialogueButton").onclick = function() {
+                    $('#alarmDialogueModal').modal('toggle');
+                    document.getElementById('alarmFile').pause();
+                }
+
+                if(alarmFrequency == 0) {
+                    removeElementFromAlarmList(tempAlarm.getUUID())
+                }
+
             }
             else{
                 newArray.push(tempAlarm);
@@ -68,11 +112,14 @@ function AlarmCoordinator(){
 
         // Restart the Function and check again
         if(alarmList.length > 0){
-            setInterval(this.checkAlarms, 5000); // Restart every 5 seconds
-        }
-
-        AlarmCoordinator.prototype.getAlarms = function() {
-            return alarmList;
+            setTimeout(new AlarmCoordinator().checkAlarms, 500); //Check every half second
         }
     };
-}
+
+    AlarmCoordinator.prototype.getAlarms = function() {
+        return alarmList;
+    };
+
+    return AlarmCoordinator;
+
+})();
