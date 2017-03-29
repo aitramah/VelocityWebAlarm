@@ -2,6 +2,9 @@
  * Intended to check alarms to see if they are ready to go off.
  * Created by Aidan on 2017-03-26.
  */
+
+const DEFAULT_ALARM_NAME = "Generic Alarm Name";
+
 var  AlarmCoordinator = (function() {
     var instance;
     var alarmList = [];
