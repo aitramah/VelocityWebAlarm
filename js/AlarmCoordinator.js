@@ -14,8 +14,12 @@ var  AlarmCoordinator = (function() {
      * Constructor which returns a Singleton
      */
     function AlarmCoordinator() {
-        if (typeof instance != "undefined") return instance;
-        instance = this;
+        if (typeof instance != "undefined")
+            return instance;
+        else {
+            readCachedAlarms();
+            instance = this;
+        }
     }
 
     /**
@@ -26,7 +30,6 @@ var  AlarmCoordinator = (function() {
     AlarmCoordinator.prototype.addNewAlarm = function(alarm){
         alarmList.push(alarm);
         setTimeout(this.checkAlarms, 500);
-        populateListUIFromArray(alarm);
     };
 
     /**
