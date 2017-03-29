@@ -14,6 +14,19 @@
     margin-top: 15%;
 }
 
+#add-alarm-body {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#alarm-name-form-group {
+    margin-left: 15px;
+}
+
+.checkbox-inline {
+
+}
+
 /* ---------- Add Alarm List and Button ---------- */
 #add-alarm-button {
     float : right;
@@ -43,5 +56,5 @@
 }
 
 .alarmListX {
-
+    font-family: "Al Bayan";
 }

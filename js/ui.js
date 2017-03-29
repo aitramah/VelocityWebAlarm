@@ -10,7 +10,7 @@ function setUp() {
     /*
      Hardcoded Alarm for Testing Purposes (Remove from Final Product)
      */
-    var sampleDaysOfWeek = [false, true, false, false, false, false, false];
+    var sampleDaysOfWeek = [false, true, true, true, false, false, false];
     var sampleDate = new Date();
     var sampleHour = sampleDate.getHours();
     var sampleMin = sampleDate.getMinutes() + 1;
@@ -59,7 +59,7 @@ function populateListUIFromArray(alarms) {
 
         //Add alarm to list
         alarmList.append("<a href='#' class='list-group-item' id='" + alarm.getUUID() + "'>"+
-            "<button type='button' class='close alarmListX' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
+            "<button type='button' class='close' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
             "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
             "<h2 class='list-group-item-heading'>" + alarm.getHour()+":"+padTime(alarms[i].getMinute()) + "</h2>" +
             stringOfLabels + "</a>");
@@ -71,10 +71,42 @@ function removeElementFromAlarmList(alarmID) {
     $('#' + alarmID).remove();
 }
 
-//This should work but it doesn't!!!
-$(function () {
-    $(document).on('click', '.alarmListX', function () {
-        removeElementFromAlarmList($(this).parent().attribute('id'));
+// ------------ UI Event Listeners -------------- \\
+
+$('#add-alarm-button').click(function () {
+
+    // Initialize Hours of Dropdown
+    $(function () {
+        for (var i = 1; i <= 12; i++) {
+            $('#select-hour').append($('<option></option>').val(i).html(i));
+        }
     });
+
+    // Initialize Minutes of Dropdown
+    $(function () {
+        for (var i = 1; i <= 60; i++) {
+            $('#select-min').append($('<option></option>').val(i).html(i));
+        }
+    });
+
+});
+
+$('#select-freq').change(function () {
+    if (this.value === "Weekly") {
+        $('#weekly-label').removeClass('hidden');
+        $('#weekly-line').removeClass('hidden');
+        $('#daysInput').removeClass('hidden');
+
+    } else if (!$('#weekly-label').hasClass('hidden')) {
+        $('#weekly-label').addClass('hidden');
+        $('#weekly-line').addClass('hidden');
+        $('#daysInput').addClass('hidden');
+    }
+});
+
+//This should work but it doesn't!!!
+$('button').click(function () {
+    alert("test");
+    removeElementFromAlarmList($(this).parent().attr('id'));
 
 });
