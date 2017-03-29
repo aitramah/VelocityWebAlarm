@@ -37,7 +37,7 @@ function populateListUIFromArray(alarms) {
         if ($('#' + alarm.getUUID()).length == 0) { // <--- Really hacky way of preventing it from making a duplicate which is happening for some reason but it's also 130am so like whatevs
             //Add alarm to list
             alarmList.append("<a href='#' class='list-group-item' id='" + alarm.getUUID() + "'>"+
-                "<button type='button' class='close alarmListX' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
+                "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
                 "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
                 "<h2 class='list-group-item-heading'>" + alarm.getHour() + ":"+padTime(alarms[i].getMinute()) + "</h2>" +
                 stringOfLabels + "</a>");
@@ -135,8 +135,7 @@ $('#submit-alarm').click(function () {
 });
 
 //This should work but it doesn't!!!
-$('.alarmListX').click(function () {
-    alert("test");
+$("[name='closebutton']").click(function () {
     removeElementFromAlarmList($(this).parent().attr('id'));
 
 });
