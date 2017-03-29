@@ -18,3 +18,35 @@ function generateUUID () { // Public Domain/MIT
         return (c === 'x' ? r : (r & 0x3 | 0x8)).toString(16);
     });
 }
+
+/**
+ * Rerouted button functionality to this function for testing of saving/retrieving cached alarms
+ */
+function testAlarmCreation() {
+
+    var sampleDaysOfWeek = [false, true, false, false, false, false, false];
+    var sampleDate = new Date();
+    var sampleHour = sampleDate.getHours();
+    var sampleMin = sampleDate.getMinutes() + 1;
+    var sampleAlarm = new Alarm(sampleDaysOfWeek, sampleHour, sampleMin, AlarmFrequency.ONCE, "Nooo");
+    AlarmCoordinator().addNewAlarm(sampleAlarm);
+
+
+    sampleDaysOfWeek = [false, true, false, true, false, true, false];
+    sampleDate = new Date();
+    sampleHour = sampleDate.getHours();
+    sampleMin = sampleDate.getMinutes() + 1;
+    var sampleAlarm1 = new Alarm(sampleDaysOfWeek, sampleHour, sampleMin, AlarmFrequency.ONCE, "Woot time");
+    AlarmCoordinator().addNewAlarm(sampleAlarm1);
+
+    sampleDaysOfWeek = [true, true, true, true, true, true, true];
+    sampleDate = new Date();
+    sampleHour = sampleDate.getHours();
+    sampleMin = sampleDate.getMinutes() + 1;
+    var sampleAlarm2 = new Alarm(sampleDaysOfWeek, sampleHour, sampleMin, AlarmFrequency.ONCE, "Anotha one");
+    AlarmCoordinator().addNewAlarm(sampleAlarm2);
+}
+
+window.onbeforeunload = function() {
+     AlarmCoordinator().storeAlarmsInCache();
+}

@@ -75,7 +75,7 @@
                         <p>Add stuff here Sharon</p>
                     </div>
                     <div class="modal-footer">
-                        <button type="button" class="btn btn-primary">Add Alarm!</button>
+                        <button id="new-alarm-button" type="button" class="btn btn-primary" onclick="testAlarmCreation()">Add Alarm!</button>
                     </div>
                 </div>
             </div>s
@@ -103,12 +103,12 @@
             $(document).ready(startTime());
             $(document).ready((new AlarmCoordinator).checkAlarms());
 
+
 //          Enable Modal
             $('#myModal').on('shown.bs.modal', function () {
                 $('#myInput').focus()
-            })
+            });
 
-//          Setup Alarm List
             setUp();
 
         </script>

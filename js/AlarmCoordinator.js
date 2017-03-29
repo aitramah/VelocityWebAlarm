@@ -9,11 +9,9 @@ var  AlarmCoordinator = (function() {
 
     /**
      * Constructor which returns a Singleton
-     *
      */
     function AlarmCoordinator() {
         if (typeof instance != "undefined") return instance;
-
         instance = this;
     }
 
@@ -25,6 +23,7 @@ var  AlarmCoordinator = (function() {
     AlarmCoordinator.prototype.addNewAlarm = function(alarm){
         alarmList.push(alarm);
         setTimeout(this.checkAlarms, 500);
+        populateListUIFromArray(alarm);
     };
 
     /**
@@ -39,6 +38,7 @@ var  AlarmCoordinator = (function() {
      * for it to go off.
      */
     AlarmCoordinator.prototype.checkAlarms = function() {
+
 
         var alarmLength = alarmList.length;
         var today = new Date();
@@ -83,12 +83,28 @@ var  AlarmCoordinator = (function() {
 
         // Restart the Function and check again
         if(alarmList.length > 0){
-            setTimeout(new AlarmCoordinator().checkAlarms, 500); //Check every half second
+            setTimeout(new AlarmCoordinator().checkAlarms, 5000); //Check every half second
         }
     };
 
     AlarmCoordinator.prototype.getAlarms = function() {
         return alarmList;
+    };
+
+    /**
+     * Reads any stored alarms from the cache
+     */
+    AlarmCoordinator.prototype.readCachedAlarms = function()  {
+        alarmList = JSON.parse(localStorage.getItem("alarms"));
+    };
+
+    /**
+     * If the alarm list is not empty or undefined, this function stores alarms that have
+     * been created during this session (and perhaps previous ones) in the cache
+     */
+    AlarmCoordinator.prototype.storeAlarmsInCache = function()  {
+        if(alarmList != "undefined" && alarmList.length > 0)
+            localStorage.setItem("alarms", alarmList);
     };
 
     return AlarmCoordinator;

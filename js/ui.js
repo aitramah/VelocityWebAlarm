@@ -72,9 +72,9 @@ function removeElementFromAlarmList(alarmID) {
 }
 
 //This should work but it doesn't!!!
-$(function () {
+//$(function () {
     $(document).on('click', '.alarmListX', function () {
         removeElementFromAlarmList($(this).parent().attribute('id'));
     });
 
-});
+//});
