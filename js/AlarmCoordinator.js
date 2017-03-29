@@ -93,7 +93,9 @@ var  AlarmCoordinator = (function() {
                     document.getElementById('alarmFile').pause();
                 }
 
-                removeElementFromAlarmList(tempAlarm.getUUID())
+                if(alarmFrequency == 0) {
+                    removeElementFromAlarmList(tempAlarm.getUUID())
+                }
 
             }
             else{
