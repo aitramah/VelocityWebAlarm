@@ -64,7 +64,7 @@ $(document).ready(function () {
 
     // Initialize Minutes of Dropdown
     $(function () {
-        for (var i = 0; i <= 60; i++) {
+        for (var i = 0; i < 60; i++) {
             $('#select-min').append($('<option></option>').val(i).html(padTime(i)));
         }
     });

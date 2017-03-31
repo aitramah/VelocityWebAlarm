@@ -9,17 +9,19 @@ var  AlarmCoordinator = (function() {
     var instance;
     var alarmList = [];
 
-
     /**
      * Constructor which returns a Singleton
      */
     function AlarmCoordinator() {
-        if (typeof instance != "undefined")
-            return instance;
-        else {
-            readCachedAlarms();
+        console.log("AlarmCoordinator()");
+        if (typeof instance == 'undefined') {
+            console.log("instance undefined");
+            this.readAlarmsInCache();
             instance = this;
         }
+
+        return instance;
+
     }
 
     /**
@@ -28,8 +30,18 @@ var  AlarmCoordinator = (function() {
      * @param alarm Alarm to be checked.
      */
     AlarmCoordinator.prototype.addNewAlarm = function(alarm){
+        console.log("AlarmCoordinator.prototype.addNewAlarm");
         alarmList.push(alarm);
+        console.log("new alarm: " + JSON.stringify(alarm));
+        console.log("Contents of AlarmList: ");
+        for(var i=0; i<alarmList.length; i++) {
+            console.log("ALARM "+i+"\n"+JSON.stringify(alarmList[i]));
+        }
+
+        this.storeAlarmsInCache();
+
         setTimeout(this.checkAlarms, 500);
+
     };
 
     /**
@@ -63,7 +75,7 @@ var  AlarmCoordinator = (function() {
             var alarmHour = tempAlarm.getHour();
             var alarmMinute = tempAlarm.getMinute();
             var alarmFrequency = tempAlarm.getFreq();
-            var dayFlags = tempAlarm.getDayFlags();
+            var dayFlags = tempAlarm.getDaysOfWeek();
 
             // Conditional statement that checks whether the day, hour, and minute are
             // correct for the alarm to go off.
@@ -115,7 +127,7 @@ var  AlarmCoordinator = (function() {
 
         // Restart the Function and check again
         if(alarmList.length > 0){
-            setTimeout(new AlarmCoordinator().checkAlarms, 5000); //Check every half second
+            setTimeout(new AlarmCoordinator().checkAlarms, 500); //Check every half second
         }
     };
 
@@ -124,19 +136,54 @@ var  AlarmCoordinator = (function() {
     };
 
     /**
-     * Reads any stored alarms from the cache
-     */
-    AlarmCoordinator.prototype.readCachedAlarms = function()  {
-        alarmList = JSON.parse(localStorage.getItem("alarms"));
-    };
-
-    /**
      * If the alarm list is not empty or undefined, this function stores alarms that have
      * been created during this session (and perhaps previous ones) in the cache
      */
     AlarmCoordinator.prototype.storeAlarmsInCache = function()  {
-        if(alarmList != "undefined" && alarmList.length > 0)
-            localStorage.setItem("alarms", alarmList);
+        console.log("AlarmCoordinator.prototype.storeAlarmsInCache");
+        localStorage.removeItem("alarms");
+        if(alarmList !== null && alarmList.length > 0) {
+            var toSave = JSON.stringify(alarmList);
+            console.log("About to save: \n" + toSave);
+            localStorage.setItem("alarms", toSave);
+
+        }
+
+
+
+
+        //TESTING
+        var obj = localStorage.getItem("alarms");
+        console.log("In cache: \n" + obj);
+
+    };
+
+    /**
+     * Read any stored alarms from the cache
+     */
+    AlarmCoordinator.prototype.readAlarmsInCache = function() {
+
+        // get whatever has been cached
+        var cachedContents = localStorage.getItem('alarms') || null;
+        console.log("cached contents: " + cachedContents);
+
+        // If something was retrieved
+        if(cachedContents !== null) {
+
+            // Read the JSON array
+            var tempList = JSON.parse(cachedContents);
+
+            alert("Number of saved alarms: " + tempList.length);
+
+            // Use the parsed JSON contents to populate alarmList with the cached content
+            for (var i = 0; i < tempList.length; i++) {
+                console.log("getting alarm number "+i);
+                var alarm = new Alarm(tempList[i].daysOfWeek, tempList[i].hour, tempList[i].min, tempList[i].frequency, tempList[i].name, tempList[i].uuid);
+                alarmList.push(alarm);
+            }
+
+        }
+
     };
 
     return AlarmCoordinator;
