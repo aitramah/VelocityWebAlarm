@@ -23,7 +23,7 @@ var  AlarmCoordinator = (function() {
             instance = this;
         }
         return instance;
-    };
+    }
 
     /**
      * Simple method designed to add an alarm to the alarmList. It
@@ -99,8 +99,7 @@ var  AlarmCoordinator = (function() {
                 document.getElementById('alarmFile').play();
 
                 // Name Editing
-                var alarmName = tempAlarm.getName();
-                document.getElementById("alarmDialogueName").innerHTML = alarmName;
+                document.getElementById("alarmDialogueName").innerHTML = tempAlarm.getName();
 
                 // Modal
                 $('#alarmDialogueModal').modal({
@@ -180,7 +179,7 @@ var  AlarmCoordinator = (function() {
             }
         }
 
-    }
+    };
 
     this.getAlarms = function() {
         for(var i = 0; i < alarmList.length; i++) {

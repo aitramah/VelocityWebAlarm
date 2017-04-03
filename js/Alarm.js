@@ -81,17 +81,15 @@ function Alarm(daysOfWeek, hour, min, frequency, name) {
      *
      * @returns {{uuid: string, daysOfWeek: *, hour: *, min: *, frequency: *, name: *}}
      */
-    toJSON: function() {
+    Alarm.prototype.toJSON = function() {
         console.log('toJSON');
-        var returnObject = {"daysOfWeek": this.daysOfWeek,
+        return {"daysOfWeek": this.daysOfWeek,
                             "hour": this.hour,
                             "min": this.min,
                             "frequency": this.frequency,
                             "name": this.name,
                             "uuid": this.uuid
                             };
-
-        return returnObject;
     };
 
 
