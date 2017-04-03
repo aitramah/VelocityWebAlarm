@@ -9,7 +9,11 @@
  */
 function populateListUIFromArray(alarms) {
 
-    const WEEKDAY_ABR = ['Sunday',
+
+    console.log('size of alarm list: '+alarms.length);
+    console.log(alarms);
+    const WEEKDAY_ABR =
+        ['Sunday',
         'Mon',
         'Tue',
         'Wed',
@@ -18,10 +22,13 @@ function populateListUIFromArray(alarms) {
         'Sat'];
 
     var alarmList = $('#alarm-list');
+    var tempAlarmList = alarms;
+
     // For each alarm held in the coordinator, create a list element
     for(var i = 0; i < alarms.length; i++) {
-        var alarm = alarms[i];
 
+        var alarm = tempAlarmList[i];
+        console.log(typeof alarm);
         //For repeating alarms obtain the days it runs as a series of labels
         var stringOfLabels = "";
         if (alarm.getFreq() === AlarmFrequency.WEEKLY) {
@@ -34,12 +41,14 @@ function populateListUIFromArray(alarms) {
             }
         }
 
-        if ($('#' + alarm.getUUID()).length == 0) { // <--- Really hacky way of preventing it from making a duplicate which is happening for some reason but it's also 130am so like whatevs
+        // If there are no elements corresponding to the alarm's UUID
+        if ($('#' + alarms[i].getUUID()).length == 0) {
+            console.log(alarm.getUUID());
             //Add alarm to list
             alarmList.append("<a href='#' class='list-group-item' id='" + alarm.getUUID() + "'>"+
                 "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
                 "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
-                "<h2 class='list-group-item-heading'>" + alarm.getHour() + ":"+padTime(alarms[i].getMinute()) + "</h2>" +
+                "<h2 class='list-group-item-heading'>" + alarm.getHour() + ":"+padTime(alarm.getMinute()) + "</h2>" +
                 stringOfLabels + "</a>");
         }
 
@@ -85,8 +94,6 @@ $('#select-freq').change(function () {
 });
 
 $('#submit-alarm').click(function () {
-    //Probably not the best way of doing this but as is life.
-
 
     //Obtain Alarm Name
     var alarmName = $('#inputAlarmName').val();
@@ -126,11 +133,11 @@ $('#submit-alarm').click(function () {
         daysOfWeek[today.getDay()] = true;
     }
 
+    var coordinator = new AlarmCoordinator();
     var alarm = new Alarm(daysOfWeek, hour, min, freq, alarmName);
-    var ac = new AlarmCoordinator();
-    ac.addNewAlarm(alarm);
+    coordinator.addNewAlarm(alarm);
     $('#add-alarm-modal').modal('toggle');
-    populateListUIFromArray(ac.getAlarms());
+    populateListUIFromArray(coordinator.getAlarms());
 
 });
 

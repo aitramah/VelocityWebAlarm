@@ -183,17 +183,16 @@
 
         <script>
 
-//          Start the clock
-            $(document).ready(startTime());
-            $(document).ready(new AlarmCoordinator());
-
-
 //          Enable Modal
             $('#myModal').on('shown.bs.modal', function () {
                 $('#myInput').focus()
             });
 
-            populateListUIFromArray(AlarmCoordinator().getAlarms());
+//          Start the clock
+            $(document).ready(startTime());
+            $(document).ready(populateListUIFromArray(AlarmCoordinator().getAlarms()));
+
+
 
         </script>
 

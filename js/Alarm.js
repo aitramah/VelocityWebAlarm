@@ -2,33 +2,20 @@
  * Created by colin thompson on 2017-03-21.
  */
 
-var Alarm = (function() {
+function Alarm(daysOfWeek, hour, min, frequency, name) {
 
-    var uuid;
-    var daysOfWeek; //A bitmask containing the days of the week the alarm should go off on (array of booleans)
-    var hour; //The hour of the day to go off (0 - 23)
-    var min; //The minute to go off (0 - 59)
-    var frequency; //How frequently the alarm goes off (once, daily, weekly) (if daily bitmask should be all ones)
-    var name; //The name of the alarm
+    var daysOfWeek = daysOfWeek; //A bitmask containing the days of the week the alarm should go off on (array of booleans)
+    var hour = hour; //The hour of the day to go off (0 - 23)
+    var min = min; //The minute to go off (0 - 59)
+    var frequency = frequency; //How frequently the alarm goes off
+    var name = name; //The name of the alarm
+    var uuid = generateUUID();
 
-    function Alarm(daysOfWeek, hour, min, frequency, name, uuid) {
-
-        this.daysOfWeek = daysOfWeek;
-        this.hour = hour;
-        this.min = min;
-        this.frequency = frequency;
-        this.name = name;
-        this.uuid = uuid;
-        if (this.uuid === undefined)
-            this.uuid = generateUUID();
-
-        return this;
-    }
-
+    var dayFlags = [false, false, false, false, false, false, false]; // Used for alarms going off
 
 
     Alarm.prototype.getDaysOfWeek = function () {
-        return daysOfWeek;
+        return daysOfWeek.slice();
     };
 
     Alarm.prototype.setDaysOfWeek = function (theDaysOfWeek) {
@@ -71,6 +58,21 @@ var Alarm = (function() {
         return uuid;
     };
 
+    Alarm.prototype.setUUID = function (id) {
+        uuid = id;
+    };
+
+
+    Alarm.prototype.getDayFlags = function() {
+        return dayFlags;
+    };
+
+    Alarm.prototype.setDayFlags = function(dayIndex) {
+        for(i = 0; i < dayFlags.length; i++){
+            dayFlags[i] = false;
+        }
+        dayFlags[dayIndex] = true;
+    };
 
 
     /**
@@ -79,24 +81,25 @@ var Alarm = (function() {
      *
      * @returns {{uuid: string, daysOfWeek: *, hour: *, min: *, frequency: *, name: *}}
      */
-    Alarm.prototype.toJSON = function () {
-        var returnObject = {"uuid": uuid,
-                            "daysOfWeek": daysOfWeek,
-                            "hour": hour,
-                            "min": min,
-                            "frequency": frequency,
-                            "name": name };
+    toJSON: function() {
+        console.log('toJSON');
+        var returnObject = {"daysOfWeek": this.daysOfWeek,
+                            "hour": this.hour,
+                            "min": this.min,
+                            "frequency": this.frequency,
+                            "name": this.name,
+                            "uuid": this.uuid
+                            };
 
         return returnObject;
     };
 
-    return Alarm;
 
-})();
+
+}
 
 var AlarmFrequency = {
     ONCE: 0,
     DAILY: 1,
     WEEKLY: 2
 };
-
