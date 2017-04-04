@@ -68,3 +68,12 @@
 .alarmListX {
 
 }
+
+#modify-alarm-button {
+    float: right;
+}
+
+#modify-alarm-button-image {
+    width: 20px;
+    height: 20px;
+}
