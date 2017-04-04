@@ -30,7 +30,7 @@ var AlarmCoordinator = (function() {
      * also starts the checkAlarms method.
      * @param alarm Alarm to be checked.
      */
-    this.addNewAlarm = function(alarm){
+    AlarmCoordinator.prototype.addNewAlarm = function(alarm){
         console.log("AlarmCoordinator.prototype.addNewAlarm");
         console.log("new alarm: " + JSON.stringify(alarm));
         alarmList.push(alarm);

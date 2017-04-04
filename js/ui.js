@@ -85,13 +85,16 @@ $('#select-freq').change(function () {
     }
 });
 
-var ul = document.getElementById('alarm-list'); // Parent
+
+// http://stackoverflow.com/questions/26204120/get-li-element-onclick-with-pure-javascript-without-applying-onclick-to-each-ele
+// trying to get onclick working for each list element (each alarm), but it's not working???
+/*var ul = document.getElementById('alarm-list'); // Parent
 
 ul.addEventListener('click', function(e) {
     if (e.target.tagName === 'LI'){
         alert(e.target.id);  // Check if the element is a LI
     }
-});
+});*/
 
 $('#submit-alarm').click(function () {
     //Probably not the best way of doing this but as is life.
