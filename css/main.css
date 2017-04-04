@@ -3,12 +3,12 @@
 }
 
 #add-alarm-button-image {
-    width: 20px;
-    height: 20px;
+    width: 120px;
+    height: 120px;
 }
 
 #alarm-block {
-    padding-left: 40px;
+
 }
 
 .btn-primary-transparent {
@@ -16,3 +16,8 @@
     border-color: transparent;
 }
 
+.alarm-div {
+    padding-left: 40px;
+    border-top: 1px solid #cecece;
+    border-bottom: 1px solid #cecece;
+}

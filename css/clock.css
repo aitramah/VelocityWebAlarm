@@ -18,7 +18,7 @@
 #clock-block {
     position: relative;
     height : 90vh;
-    border-right: 2px solid #cecece;
+    border-right: 1px solid #cecece;
 }
 
 #date-and-clock {
