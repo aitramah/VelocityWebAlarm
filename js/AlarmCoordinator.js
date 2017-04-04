@@ -219,7 +219,7 @@ var AlarmCoordinator = (function() {
         alarmList = newArray;
 
         console.log(newArray);
-
+        this.storeAlarmsInCache();
     };
 
 
