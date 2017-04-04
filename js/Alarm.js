@@ -3,70 +3,90 @@
  */
 
 function Alarm(daysOfWeek, hour, min, frequency, name) {
-    var uuid = generateUUID();
-    var daysOfWeek = daysOfWeek; //A bitmask containing the days of the week the alarm should go off on (array of booleans)
-    var hour = hour; //The hour of the day to go off (0 - 23)
-    var min = min; //The minute to go off (0 - 59)
-    var frequency = frequency; //How frequently the alarm goes off (once, daily, weekly) (if daily bitmask should be all ones)
-    var name = name; //The name of the alarm
-    var dayFlags = [false, false, false, false, false, false, false];
+    var mDaysOfWeek = daysOfWeek; //A bitmask containing the days of the week the alarm should go off on (array of booleans)
+    var mHour = hour; //The hour of the day to go off (0 - 23)
+    var mMin = min; //The minute to go off (0 - 59)
+    var mFrequency = frequency; //How frequently the alarm goes off
+    var mName = name; //The name of the alarm
 
+    var mUuid = generateUUID();
+    var mDayFlags = [false, false, false, false, false, false, false]; // Used for alarms going off
 
-    Alarm.prototype.getDaysOfWeek = function () {
-        return daysOfWeek.slice(0);
+    this.getDaysOfWeek = function () {
+        return mDaysOfWeek.slice();
     };
 
-    Alarm.prototype.setDaysOfWeek = function (theDaysOfWeek) {
-        daysOfWeek = theDaysOfWeek;
+    this.setDaysOfWeek = function (theDaysOfWeek) {
+        mDaysOfWeek = theDaysOfWeek;
     };
 
-    Alarm.prototype.getName = function () {
-        return name;
+    this.getName = function () {
+        return mName;
     };
 
-    Alarm.prototype.resetName = function (newName) {
-        name = newName;
+    this.resetName = function (newName) {
+        mName = newName;
     };
 
-    Alarm.prototype.setHour = function (anHour) {
-        hour = anHour;
+    this.getHour = function () {
+        return mHour;
     };
 
-    Alarm.prototype.getHour = function () {
-        return hour;
+    this.setHour = function (anHour) {
+        mHour = anHour;
     };
 
-    Alarm.prototype.setMinute = function (minute) {
-        min = minute;
+    this.getMinute = function () {
+        return mMin;
     };
 
-    Alarm.prototype.getMinute = function () {
-        return min;
+    this.setMinute = function (minute) {
+        mMin = minute;
     };
 
-    Alarm.prototype.getFreq = function () {
-        return frequency;
+    this.getFreq = function () {
+        return mFrequency;
     };
 
-    Alarm.prototype.setFreq = function (freq) {
-        frequency = freq;
+    this.setFreq = function (freq) {
+        mFrequency = freq;
     };
 
-    Alarm.prototype.getUUID = function () {
-        return uuid;
+    this.getUUID = function () {
+        return mUuid;
     };
 
-
-    Alarm.prototype.getDayFlags = function() {
-        return dayFlags;
+    this.setUUID = function (id) {
+        mUuid = id;
     };
 
-    Alarm.prototype.setDayFlags = function(dayIndex) {
-        for(i = 0; i < dayFlags.length; i++){
-            dayFlags[i] = false;
+    this.getDayFlags = function() {
+        return mDayFlags;
+    };
+
+    this.setDayFlags = function(dayIndex) {
+        for(i = 0; i < mDayFlags.length; i++){
+            mDayFlags[i] = false;
         }
-        dayFlags[dayIndex] = true;
-    }
+        mDayFlags[dayIndex] = true;
+    };
+
+    /**
+     * This function is needed to be able to "stringify" alarm objects such that they can be
+     * serialized as strings and stored.
+     *
+     * @returns {{uuid: string, daysOfWeek: *, hour: *, min: *, frequency: *, name: *}}
+     */
+    this.toJSON = function() {
+        console.log('toJSON');
+        return {"daysOfWeek": mDaysOfWeek,
+            "hour": mHour,
+            "min": mMin,
+            "frequency": mFrequency,
+            "name": mName,
+            "uuid": mUuid
+        };
+    };
 }
 
 var AlarmFrequency = {
@@ -74,4 +94,3 @@ var AlarmFrequency = {
     DAILY: 1,
     WEEKLY: 2
 };
-
