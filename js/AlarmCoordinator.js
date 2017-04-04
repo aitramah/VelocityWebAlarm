@@ -5,19 +5,24 @@
 
 const DEFAULT_ALARM_NAME = "Generic Alarm Name";
 
-var  AlarmCoordinator = (function() {
-    var instance;
+var AlarmCoordinator = (function() {
     var alarmList = [];
-
+    var instance;
 
     /**
      * Constructor which returns a Singleton
-     *
      */
     function AlarmCoordinator() {
-        if (typeof instance != "undefined") return instance;
+        console.log("AlarmCoordinator()");
+        if (typeof instance == 'undefined') {
+            console.log("instance undefined");
+            this.readAlarmsInCache();
+            if(alarmList != 'undefined' && alarmList.length >0)
+                setTimeout(this.checkAlarms, 500);
 
-        instance = this;
+            instance = this;
+        }
+        return instance;
     }
 
     /**
@@ -25,9 +30,20 @@ var  AlarmCoordinator = (function() {
      * also starts the checkAlarms method.
      * @param alarm Alarm to be checked.
      */
-    AlarmCoordinator.prototype.addNewAlarm = function(alarm){
+    this.addNewAlarm = function(alarm){
+        console.log("AlarmCoordinator.prototype.addNewAlarm");
+        console.log("new alarm: " + JSON.stringify(alarm));
         alarmList.push(alarm);
+        console.log("Contents of AlarmList: ");
+
+        for(var i=0; i<alarmList.length; i++) {
+            console.log("ALARM "+i+"\n"+JSON.stringify(alarmList[i]));
+        }
+
+        this.storeAlarmsInCache();
+
         setTimeout(this.checkAlarms, 500);
+
     };
 
     /**
@@ -42,6 +58,7 @@ var  AlarmCoordinator = (function() {
      * for it to go off.
      */
     AlarmCoordinator.prototype.checkAlarms = function() {
+
 
         var alarmLength = alarmList.length;
         var today = new Date();
@@ -82,8 +99,7 @@ var  AlarmCoordinator = (function() {
                 document.getElementById('alarmFile').play();
 
                 // Name Editing
-                var alarmName = tempAlarm.getName();
-                document.getElementById("alarmDialogueName").innerHTML = alarmName;
+                document.getElementById("alarmDialogueName").innerHTML = tempAlarm.getName();
 
                 // Modal
                 $('#alarmDialogueModal').modal({
@@ -112,13 +128,67 @@ var  AlarmCoordinator = (function() {
 
         // Restart the Function and check again
         if(alarmList.length > 0){
-            setTimeout(new AlarmCoordinator().checkAlarms, 500); //Check every half second
+            setTimeout(this.checkAlarms, 500); //Check every half second
         }
     };
 
-    AlarmCoordinator.prototype.getAlarms = function() {
-        return alarmList;
+    /**
+     * If the alarm list is not empty or undefined, this function stores alarms that have
+     * been created during this session (and perhaps previous ones) in the cache
+     */
+    this.storeAlarmsInCache = function()  {
+        console.log("AlarmCoordinator.prototype.storeAlarmsInCache");
+        localStorage.removeItem("alarms");
+        if(alarmList !== null && alarmList.length > 0) {
+            var toSave = JSON.stringify(alarmList);
+            console.log("About to save: \n" + toSave);
+            console.log("first alarm name: " + alarmList[0].getName());
+            localStorage.setItem("alarms", toSave);
+
+        }
+
+        //TESTING
+        var obj = localStorage.getItem("alarms");
+        console.log("In cache: \n" + obj);
+
     };
+
+    /**
+     * Read any stored alarms from the cache
+     */
+    //AlarmCoordinator.prototype.
+    this.readAlarmsInCache = function() {
+
+        // get whatever has been cached
+        var cachedContents = localStorage.getItem('alarms') || null;
+        console.log("cached contents: " + cachedContents);
+
+        // If something was retrieved
+        if(cachedContents !== null) {
+
+            // Read the JSON array
+            var tempList = JSON.parse(cachedContents);
+
+
+            // Use the parsed JSON contents to populate alarmList with the cached content
+            for (var i = 0; i < tempList.length; i++) {
+                var t = tempList[i];
+                // Create a new alarm by using static method
+                var alarm = new Alarm(t.daysOfWeek, t.hour, t.min, t.frequency, t.name);
+                alarm.setUUID(t.uuid);
+                alarmList.push(alarm);
+            }
+        }
+
+    };
+
+    this.getAlarms = function() {
+        for(var i = 0; i < alarmList.length; i++) {
+            console.log("alarmList["+i+"] : " + JSON.stringify(alarmList[i]));
+        }
+        return alarmList.slice();
+    };
+
 
     return AlarmCoordinator;
 
