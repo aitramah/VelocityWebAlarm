@@ -5,9 +5,9 @@
 
 const DEFAULT_ALARM_NAME = "Generic Alarm Name";
 
-var  AlarmCoordinator = (function() {
-    var instance;
+var AlarmCoordinator = (function() {
     var alarmList = [];
+    var instance;
 
     /**
      * Constructor which returns a Singleton
@@ -136,12 +136,13 @@ var  AlarmCoordinator = (function() {
      * If the alarm list is not empty or undefined, this function stores alarms that have
      * been created during this session (and perhaps previous ones) in the cache
      */
-    storeAlarmsInCache = function()  {
+    this.storeAlarmsInCache = function()  {
         console.log("AlarmCoordinator.prototype.storeAlarmsInCache");
         localStorage.removeItem("alarms");
         if(alarmList !== null && alarmList.length > 0) {
             var toSave = JSON.stringify(alarmList);
             console.log("About to save: \n" + toSave);
+            console.log("first alarm name: " + alarmList[0].getName());
             localStorage.setItem("alarms", toSave);
 
         }
@@ -156,7 +157,7 @@ var  AlarmCoordinator = (function() {
      * Read any stored alarms from the cache
      */
     //AlarmCoordinator.prototype.
-    readAlarmsInCache = function() {
+    this.readAlarmsInCache = function() {
 
         // get whatever has been cached
         var cachedContents = localStorage.getItem('alarms') || null;
