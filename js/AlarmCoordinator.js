@@ -43,7 +43,6 @@ var AlarmCoordinator = (function() {
         this.storeAlarmsInCache();
 
         setTimeout(this.checkAlarms, 500);
-
     };
 
     /**
@@ -58,7 +57,6 @@ var AlarmCoordinator = (function() {
      * for it to go off.
      */
    this.checkAlarms = function() {
-
         var alarmLength = alarmList.length;
         var today = new Date();
         var newArray = [];
