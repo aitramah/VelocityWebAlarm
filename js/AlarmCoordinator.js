@@ -57,8 +57,7 @@ var AlarmCoordinator = (function() {
      * is not put in the updated list is if it is non-repeating and it is time
      * for it to go off.
      */
-    AlarmCoordinator.prototype.checkAlarms = function() {
-
+   this.checkAlarms = function() {
 
         var alarmLength = alarmList.length;
         var today = new Date();
@@ -154,6 +153,20 @@ var AlarmCoordinator = (function() {
     };
 
     /**
+     * Checks if an object is empty by iterating over all of its properties and checking if all do not exist
+     * @param obj
+     * @returns {boolean}
+     */
+    function isEmpty(obj) {
+        for(var prop in obj) {
+            if(obj.hasOwnProperty(prop))
+                return false;
+        }
+
+        return true;
+    }
+
+    /**
      * Read any stored alarms from the cache
      */
     //AlarmCoordinator.prototype.
@@ -173,6 +186,9 @@ var AlarmCoordinator = (function() {
             // Use the parsed JSON contents to populate alarmList with the cached content
             for (var i = 0; i < tempList.length; i++) {
                 var t = tempList[i];
+
+                if (isEmpty(t)) continue;
+
                 // Create a new alarm by using static method
                 var alarm = new Alarm(t.daysOfWeek, t.hour, t.min, t.frequency, t.name);
                 alarm.setUUID(t.uuid);
@@ -187,6 +203,25 @@ var AlarmCoordinator = (function() {
             console.log("alarmList["+i+"] : " + JSON.stringify(alarmList[i]));
         }
         return alarmList.slice();
+    };
+
+    /**
+     * Removes the specified alarm from the alarm list
+     * @param uuid
+     */
+    this.removeAlarm = function (uuid) {
+        console.log(alarmList);
+        var newArray = [];
+        for (var i = 0; i < alarmList.length; i++) {
+            console.log("index " + i + " uuid: " + alarmList[i].getUUID() + " matching " + uuid);
+            if (alarmList[i].getUUID() != uuid) {
+                newArray.push(alarmList[i]);
+            }
+        }
+        alarmList = newArray;
+
+        console.log(newArray);
+
     };
 
 
