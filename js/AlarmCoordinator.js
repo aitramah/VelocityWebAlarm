@@ -222,6 +222,23 @@ var AlarmCoordinator = (function() {
         this.storeAlarmsInCache();
     };
 
+    /**
+     * Swaps out the alarm with oldAlarmID to newAlarm
+     */
+    this.changeAlarm = function (oldAlarmID, newAlarm) {
+        removeAlarm(oldAlarmID);
+        addNewAlarm(newAlarm)
+    };
+
+    /**
+     * Returns a running alarm with given id
+     */
+    this.getAlarmByID = function (alarmID) {
+        for (var i = 0; i < AlarmList.length; i++) {
+            if (AlarmList[i].getUUID() == alarmID)
+                return AlarmList[i];
+        }
+    };
 
     return AlarmCoordinator;
 
