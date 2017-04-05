@@ -56,7 +56,7 @@ var AlarmCoordinator = (function() {
      * is not put in the updated list is if it is non-repeating and it is time
      * for it to go off.
      */
-    this.checkAlarms = function() {
+   this.checkAlarms = function() {
         var alarmLength = alarmList.length;
         var today = new Date();
         var newArray = [];
@@ -203,6 +203,42 @@ var AlarmCoordinator = (function() {
         return alarmList.slice();
     };
 
+    /**
+     * Removes the specified alarm from the alarm list
+     * @param uuid
+     */
+    this.removeAlarm = function (uuid) {
+        console.log(alarmList);
+        var newArray = [];
+        for (var i = 0; i < alarmList.length; i++) {
+            console.log("index " + i + " uuid: " + alarmList[i].getUUID() + " matching " + uuid);
+            if (alarmList[i].getUUID() != uuid) {
+                newArray.push(alarmList[i]);
+            }
+        }
+        alarmList = newArray;
+
+        console.log(newArray);
+        this.storeAlarmsInCache();
+    };
+
+    /**
+     * Swaps out the alarm with oldAlarmID to newAlarm
+     */
+    this.changeAlarm = function (oldAlarmID, newAlarm) {
+        removeAlarm(oldAlarmID);
+        addNewAlarm(newAlarm)
+    };
+
+    /**
+     * Returns a running alarm with given id
+     */
+    this.getAlarmByID = function (alarmID) {
+        for (var i = 0; i < AlarmList.length; i++) {
+            if (AlarmList[i].getUUID() == alarmID)
+                return AlarmList[i];
+        }
+    };
 
     return AlarmCoordinator;
 

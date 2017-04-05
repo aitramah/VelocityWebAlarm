@@ -136,12 +136,14 @@ $('#submit-alarm').click(function () {
 
 });
 
-//This should work but it doesn't!!!
-$("[name='closebutton']").click(function () {
-    removeElementFromAlarmList($(this).parent().attr('id'));
-
+/**
+ * Listens for button to be clicked on and removes alarm from ui and list.
+ */
+$(document).on("click", "[name='closebutton']", function () {
+    var id = $(this).parent().attr('id');
+    removeElementFromAlarmList(id);
+    (new AlarmCoordinator).removeAlarm(id);
 });
-
 /**
  * Returns the Alarm Frequency Enum associated with the string
  * @param freqString the string to test
