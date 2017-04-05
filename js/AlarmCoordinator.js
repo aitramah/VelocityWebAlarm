@@ -105,6 +105,9 @@ var AlarmCoordinator = (function() {
 
                 if(alarmFrequency == 0) {
                     removeElementFromAlarmList(tempAlarm.getUUID())
+                    alarmList.splice(i, 1);
+                    i--;
+                    this.storeAlarmsInCache();
                 }
 
             }
