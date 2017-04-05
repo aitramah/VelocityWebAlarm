@@ -40,15 +40,16 @@ function populateListUIFromArray(alarms) {
             //Add alarm to list
             alarmList.append("<a href='#' class='list-group-item' id='" + alarm.getUUID() + "'>"+
                 "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
+                "<button type='button' class='btn btn-primary-transparent' name='modifybutton' id='modify-alarm-button'>" +
+                "<img id='modify-alarm-button-image' src='images/edit-alarm-button.png'>" +
+                "<span class='pull-right'></span></button>" +
                 "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
                 "<h2 class='list-group-item-heading'>" + alarm.getHour() + ":"+padTime(alarms[i].getMinute()) + "</h2>" +
                 stringOfLabels + "</a>");
         }
-
-
     }
-
 }
+
 function removeElementFromAlarmList(alarmID) {
     $('#' + alarmID).remove();
 }
@@ -88,7 +89,6 @@ $('#select-freq').change(function () {
 
 $('#submit-alarm').click(function () {
     //Probably not the best way of doing this but as is life.
-
 
     //Obtain Alarm Name
     var alarmName = $('#inputAlarmName').val();
@@ -144,6 +144,17 @@ $(document).on("click", "[name='closebutton']", function () {
     removeElementFromAlarmList(id);
     (new AlarmCoordinator).removeAlarm(id);
 });
+
+/**
+ * Listens for the modify button to be clicked and opens the modify alarm modal.
+ */
+$(document).on("click", "[name='modifybutton']", function () {
+    var modal = $('#add-alarm-modal');
+    modal.find('.modal-header h2').text('Modify Alarm');
+    modal.find('modal-footer button').text('Modify!');
+    $('#add-alarm-modal').modal('toggle');
+});
+
 /**
  * Returns the Alarm Frequency Enum associated with the string
  * @param freqString the string to test

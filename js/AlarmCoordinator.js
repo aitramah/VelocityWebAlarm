@@ -30,7 +30,7 @@ var AlarmCoordinator = (function() {
      * also starts the checkAlarms method.
      * @param alarm Alarm to be checked.
      */
-    AlarmCoordinator.prototype.addNewAlarm = function(alarm){
+    this.addNewAlarm = function(alarm){
         console.log("AlarmCoordinator.prototype.addNewAlarm");
         console.log("new alarm: " + JSON.stringify(alarm));
         alarmList.push(alarm);
@@ -56,7 +56,7 @@ var AlarmCoordinator = (function() {
      * is not put in the updated list is if it is non-repeating and it is time
      * for it to go off.
      */
-   this.checkAlarms = function() {
+    this.checkAlarms = function() {
         var alarmLength = alarmList.length;
         var today = new Date();
         var newArray = [];
