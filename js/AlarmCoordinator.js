@@ -103,12 +103,6 @@ var AlarmCoordinator = (function() {
                     show: true
                 });
 
-                // Stop Audio Object
-                document.getElementById("alarmDialogueButton").onclick = function() {
-                    $('#alarmDialogueModal').modal('toggle');
-                    document.getElementById('alarmFile').pause();
-                };
-
                 if(alarmFrequency == 0) {
                     removeElementFromAlarmList(tempAlarm.getUUID())
                 }
