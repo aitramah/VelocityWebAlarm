@@ -234,9 +234,9 @@ var AlarmCoordinator = (function() {
      * Returns a running alarm with given id
      */
     this.getAlarmByID = function (alarmID) {
-        for (var i = 0; i < AlarmList.length; i++) {
-            if (AlarmList[i].getUUID() == alarmID)
-                return AlarmList[i];
+        for (var i = 0; i < alarmList.length; i++) {
+            if (alarmList[i].getUUID() === alarmID)
+                return alarmList[i];
         }
     };
 

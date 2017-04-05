@@ -18,6 +18,7 @@ function populateListUIFromArray(alarms) {
         'Sat'];
 
     var alarmList = $('#alarm-list');
+
     // For each alarm held in the coordinator, create a list element
     for(var i = 0; i < alarms.length; i++) {
         var alarm = alarms[i];
@@ -130,10 +131,19 @@ $('#submit-alarm').click(function () {
 
     var alarm = new Alarm(daysOfWeek, hour, min, freq, alarmName);
     var ac = new AlarmCoordinator();
-    ac.addNewAlarm(alarm);
-    $('#add-alarm-modal').modal('toggle');
-    populateListUIFromArray(ac.getAlarms());
 
+    if ($('h2[id="alarm-modal-title"]').val() === 'Add Alarm'){
+        ac.addNewAlarm(alarm);
+    }
+    else {
+        ac.changeAlarm(oldAlarmID, alarm); // param1 = old alarm, param2 = new alarm
+    }
+
+    $('#add-alarm-modal').modal('toggle');
+    $('#add-alarm-modal').find('.modal-header h2').text('Add Alarm');
+    $('#add-alarm-modal').find('.modal-footer button').text('Add Alarm!');
+
+    populateListUIFromArray(ac.getAlarms());
 });
 
 /**
@@ -145,15 +155,41 @@ $(document).on("click", "[name='closebutton']", function () {
     (new AlarmCoordinator).removeAlarm(id);
 });
 
+var oldAlarmID; // global variable to hold the oldAlarmID for modifying an existing alarm
+
 /**
  * Listens for the modify button to be clicked and opens the modify alarm modal.
  */
 $(document).on("click", "[name='modifybutton']", function () {
+    oldAlarmID = $(this).parent().attr('id');
+    var oldAlarm = (new AlarmCoordinator).getAlarmByID(oldAlarmID); // param = selected alarm ID
     var modal = $('#add-alarm-modal');
-    modal.find('.modal-header h2').text('Modify Alarm');
-    modal.find('modal-footer button').text('Modify!');
+    modal.find('.modal-header h2').text('Modify Alarm'); // modal title
+    modal.find('inputAlarmName').text(oldAlarm.getName()); // alarm name
+    if (oldAlarm.getHour() < 13){
+        var hour = oldAlarm.getHour();
+        if (oldAlarm.getHour() === 12){
+            var AMPM = "PM";
+        }
+        else{
+            var AMPM = "AM";
+        }
+    }
+    else {
+        var hour = oldAlarm.getHour() - 12;
+        var AMPM = "PM";
+    }
+    modal.find('select-hour').value = hour; // hour
+    modal.find('select-minute').value = oldAlarm.getMinute(); // minute
+    modal.find('select-hour').value = AMPM; // AM/PM
+    modal.find('select-freq').value = oldAlarm.getFreq(); // frequency
+    // TODO: populate checkboxes for each day (may need to base off of frequency)
+    // checkboxes -- oldAlarm.getDayFlags();
+    modal.find('.modal-footer button').text('Modify!'); // submit button
     $('#add-alarm-modal').modal('toggle');
 });
+
+// TODO: change modal back to Add Alarm if the modal close button is pressed
 
 /**
  * Returns the Alarm Frequency Enum associated with the string
@@ -169,5 +205,4 @@ function getAlarmFreq(freqString) {
     } else {
         return AlarmFrequency.ONCE;
     }
-
 }
