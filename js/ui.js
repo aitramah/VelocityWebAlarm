@@ -38,12 +38,17 @@ function populateListUIFromArray(alarms) {
 
         // If there are no elements corresponding to the alarm's UUID
         if ($('#' + alarm.getUUID()).length == 0) {
-            console.log(alarm.getUUID());
+
+            var h = alarms[i].getHour();
+            var suffix = h < 12 ? " am" : " pm";
+            h = h % 12;
+            if (h == 0) h = 12;
+
             //Add alarm to list
             alarmList.append("<a href='#' class='list-group-item' id='" + alarm.getUUID() + "'>"+
                 "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
                 "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
-                "<h2 class='list-group-item-heading'>" + alarm.getHour() + ":"+padTime(alarms[i].getMinute()) + "</h2>" +
+                "<h2 class='list-group-item-heading'>" + h + ":"+padTime(alarms[i].getMinute()) + suffix +"</h2>" +
                 stringOfLabels + "</a>");
         }
 
@@ -52,8 +57,35 @@ function populateListUIFromArray(alarms) {
 
 }
 function removeElementFromAlarmList(alarmID) {
+    console.log("----removeElementFromAlarmList----");
     $('#' + alarmID).remove();
 }
+
+/**
+ * This function is called when an alarm is supposed to go off
+ * @param alarm
+ */
+function triggerAlarm(alarm) {
+    console.log("------triggerAlarmDisplay------");
+
+    // Create and Play Audio Object
+    document.getElementById('alarmFile').play();
+
+    // Name Editing
+    document.getElementById("alarmDialogueName").innerHTML = alarm.getName();
+
+    // Save alarm ID to dialogue content
+    document.getElementById("alarmDialogueContent").setAttribute("data-id", alarm.getUUID());
+    console.log(alarm.getUUID());
+
+    // Show modal
+    $('#alarmDialogueModal').modal({
+        show: true
+    });
+
+
+}
+
 
 // ------------ UI Event Listeners -------------- \\
 
@@ -124,10 +156,20 @@ $('#submit-alarm').click(function () {
         daysOfWeek = [true, true, true, true, true, true, true];
     }
 
-    //If no day selected pick current day.
+    //If no day is selected
     if (!daysOfWeek.includes(true)) {
         var today = new Date();
-        daysOfWeek[today.getDay()] = true;
+        var day = today.getDay();
+
+        // If the alarm is set for a time earlier than the current, make the alarm happen tomorrow
+        if(hour < today.getHours() || (hour == today.getHours() && min < today.getMinutes())) {
+            day++;
+        }
+
+        // If tomorrow is next week, adjust day
+        day = day > 6 ? 0 : day;
+
+        daysOfWeek[day] = true;
     }
 
     var alarm = new Alarm(daysOfWeek, hour, min, freq, alarmName);
@@ -138,11 +180,32 @@ $('#submit-alarm').click(function () {
 
 });
 
-// Stop Audio Object
+// Handles the "Dismiss Button" click: stops audio, makes modal invisible
 $($("#alarmDialogueButton").click(function() {
     $('#alarmDialogueModal').modal('toggle');
     document.getElementById('alarmFile').pause();
+
+    var ac = new AlarmCoordinator();
+    ac.dismissAlarm(document.getElementById("alarmDialogueContent").getAttribute("data-id"));
+
 }));
+
+// Handles a user request for snoozing alarm. It also stop audio, closes modal
+$($("#alarmDialogueSnoozeButton").click(function() {
+
+    console.log("-----Snooze Button on Click-----");
+
+    $('#alarmDialogueModal').modal('toggle');
+    document.getElementById('alarmFile').pause();
+
+
+    var ac = new AlarmCoordinator();
+    ac.snoozeAlarm(document.getElementById("alarmDialogueContent").getAttribute("data-id"));
+
+
+}));
+
+
 
 /**
  * Listens for button to be clicked on and removes alarm from ui and list.

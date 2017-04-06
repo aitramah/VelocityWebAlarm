@@ -151,7 +151,7 @@
 ================================================== -->
 <div class="modal fade bs-example-modal-sm" id="alarmDialogueModal" tabindex="-1" role="dialog">
     <div class="modal-dialog modal-sm" role="document">
-        <div class="modal-content">
+        <div class="modal-content" id="alarmDialogueContent" data-id="">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h4 class="modal-title">Alarm Going Off!</h4>
@@ -160,6 +160,7 @@
                 <p id="alarmDialogueName">*Alarm Name*</p>
             </div>
             <div class="modal-footer">
+                <button type="button" id="alarmDialogueSnoozeButton" class="btn btn-primary">Snooze</button>
                 <button type="button" id="alarmDialogueButton" class="btn btn-primary">Dismiss</button>
             </div>
         </div>

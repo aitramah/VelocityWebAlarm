@@ -3,11 +3,18 @@
  * Created by Aidan on 2017-03-26.
  */
 
-const DEFAULT_ALARM_NAME = "Generic Alarm Name";
+const DEFAULT_ALARM_NAME = "Alarm";
+const DEFAULT_SNOOZE_MINUTES = 1;
 
 var AlarmCoordinator = (function() {
+
+    // Holds list of alarms to go off
     var alarmList = [];
+
     var instance;
+
+    // Holds alarms in the process of going off or being snoozed
+    var pendingDismissal = [];
 
     /**
      * Constructor which returns a Singleton
@@ -26,12 +33,11 @@ var AlarmCoordinator = (function() {
     }
 
     /**
-     * Simple method designed to add an alarm to the alarmList. It
-     * also starts the checkAlarms method.
-     * @param alarm Alarm to be checked.
+     * Simple method designed to add an alarm to the alarmList. It also starts the checkAlarms method.
+     * @param alarm to be checked.
      */
-    this.addNewAlarm = function(alarm){
-        console.log("AlarmCoordinator.prototype.addNewAlarm");
+    this.addNewAlarm = function(alarm) {
+        console.log("------addNewAlarm------");
         console.log("new alarm: " + JSON.stringify(alarm));
         alarmList.push(alarm);
         console.log("Contents of AlarmList: ");
@@ -42,8 +48,9 @@ var AlarmCoordinator = (function() {
 
         this.storeAlarmsInCache();
 
-        setTimeout(this.checkAlarms, 500);
+        setTimeout(this.checkAlarms, 1000);
     };
+
 
     /**
      * Obtains the current time and traverses through the list of Alarms
@@ -57,68 +64,44 @@ var AlarmCoordinator = (function() {
      * for it to go off.
      */
    this.checkAlarms = function() {
-        var alarmLength = alarmList.length;
+       console.log("-----checkAlarms-----");
         var today = new Date();
-        var newArray = [];
 
         // Current Time Variables
         var h = today.getHours();
         var m = today.getMinutes();
         var weekday = today.getDay();
 
-        for(i = 0; i < alarmLength; i++){
-            var tempAlarm = alarmList[i];
-
-            // Alarm Variables
-            var alarmDays = tempAlarm.getDaysOfWeek();
-            var alarmHour = tempAlarm.getHour();
-            var alarmMinute = tempAlarm.getMinute();
-            var alarmFrequency = tempAlarm.getFreq();
-            var dayFlags = tempAlarm.getDayFlags();
+       console.log("alarmList length = "+alarmList.length);
+        for(i = 0; i < alarmList.length; i++) {
 
             // Conditional statement that checks whether the day, hour, and minute are
-            // correct for the alarm to go off.
-            if(!alarmDays[weekday] || alarmHour !== h) {
-                newArray.push(tempAlarm);
-            }
-            else if(m === alarmMinute){
+            // correct for the alarm to go off
+            if(alarmList[i].getDaysOfWeek()[weekday] && alarmList[i].getHour() === h && m === alarmList[i].getMinute()) {
+
+                var alarmFrequency = alarmList[i].getFreq();
                 if(alarmFrequency > 0){
-                    if(dayFlags[weekday]){
+                    if(alarmList[i].getDayFlags()[weekday])
                         continue;
-                    }
-                    else {
-                        tempAlarm.setDayFlags(weekday);
-                        newArray.push(tempAlarm);
-                    }
+                    else
+                        alarmList[i].setDayFlags(weekday);
                 }
 
-                // Create  and Play Audio Object
-                document.getElementById('alarmFile').play();
-
-                // Name Editing
-                document.getElementById("alarmDialogueName").innerHTML = tempAlarm.getName();
-
-                // Modal
-                $('#alarmDialogueModal').modal({
-                    show: true
-                });
+                // Push alarm that is going off to wait-to-be-dismissed list
+                pendingDismissal.push(alarmList[i]);
+                triggerAlarm(alarmList[i]);
 
                 if(alarmFrequency == 0) {
-                    removeElementFromAlarmList(tempAlarm.getUUID())
+                    removeElementFromAlarmList(alarmList[i].getUUID());
                     alarmList.splice(i, 1);
                     i--;
-                    this.storeAlarmsInCache();
                 }
 
-            }
-            else{
-                newArray.push(tempAlarm);
             }
         }
 
-        // Re-assign the Array of Alarms to remove any alarms that have gone off
-        // and shouldn't go off again
-        alarmList = newArray;
+
+       this.storeAlarmsInCache();
 
         // Restart the Function and check again
         if(alarmList.length > 0){
@@ -131,7 +114,7 @@ var AlarmCoordinator = (function() {
      * been created during this session (and perhaps previous ones) in the cache
      */
     this.storeAlarmsInCache = function()  {
-        console.log("AlarmCoordinator.prototype.storeAlarmsInCache");
+        console.log("-----storeAlarmsInCache-----");
         localStorage.removeItem("alarms");
         if(alarmList !== null && alarmList.length > 0) {
             var toSave = JSON.stringify(alarmList);
@@ -224,17 +207,53 @@ var AlarmCoordinator = (function() {
      */
     this.changeAlarm = function (oldAlarmID, newAlarm) {
         removeAlarm(oldAlarmID);
-        addNewAlarm(newAlarm)
+        addNewAlarm(newAlarm);
     };
 
     /**
      * Returns a running alarm with given id
      */
     this.getAlarmByID = function (alarmID) {
-        for (var i = 0; i < AlarmList.length; i++) {
-            if (AlarmList[i].getUUID() == alarmID)
-                return AlarmList[i];
+
+        for (var i = 0; i < alarmList.length; i++) {
+            if (alarmList[i].getUUID() == alarmID)
+                return alarmList[i];
         }
+    };
+
+    /**
+     * This function is called once an alarm has been definitely dismissed by the user
+     * @param alarmID
+     */
+    this.dismissAlarm = function(alarmID) {
+
+        console.log("-----dismissAlarm-----");
+        for(var i=0; i <pendingDismissal.length; i++) {
+            if(pendingDismissal[i].getUUID() == alarmID) {
+                pendingDismissal.splice(i, 1);
+                return;
+            }
+        }
+    };
+
+    /**
+     * This function is called to set a snooze on a specific alarm
+     * @param alarmID
+     */
+    this.snoozeAlarm = function(alarmID) {
+
+        console.log("-----snoozeAlarm-----");
+        console.log(alarmID);
+
+        // Check to find the alarm to be snoozed
+        for(var i=0; i <pendingDismissal.length; i++) {
+            // If the alarm is found, set a time out for the modal to appear
+            if(pendingDismissal[i].getUUID() == alarmID) {
+                setTimeout(function() { triggerAlarm(pendingDismissal[i]); }, DEFAULT_SNOOZE_MINUTES*60000);
+                return;
+            }
+        }
+
     };
 
     return AlarmCoordinator;
