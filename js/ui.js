@@ -137,11 +137,11 @@ $('#submit-alarm').click(function () {
     }
     else {
         ac.changeAlarm(oldAlarmID, alarm); // param1 = old alarm, param2 = new alarm
+        // TODO: old alarm is still visible in the alarm list (refreshing page fixes it)
+        // TODO: newly added alarm is not being saved correctly (refresh page, then click on alarm to see issue)
     }
 
-    $('#add-alarm-modal').modal('toggle');
-    $('#add-alarm-modal').find('.modal-header h2').text('Add Alarm');
-    $('#add-alarm-modal').find('.modal-footer button').text('Add Alarm!');
+    $('#add-alarm-modal').modal('hide');
 
     populateListUIFromArray(ac.getAlarms());
 });
@@ -159,13 +159,19 @@ var oldAlarmID; // global variable to hold the oldAlarmID for modifying an exist
 
 /**
  * Listens for the modify button to be clicked and opens the modify alarm modal.
+ * The modal will be pre-populated with information from the existing alarm.
  */
 $(document).on("click", "[name='modifybutton']", function () {
+
     oldAlarmID = $(this).parent().attr('id');
     var oldAlarm = (new AlarmCoordinator).getAlarmByID(oldAlarmID); // param = selected alarm ID
+
     var modal = $('#add-alarm-modal');
-    modal.find('.modal-header h2').text('Modify Alarm'); // modal title
-    modal.find('inputAlarmName').text(oldAlarm.getName()); // alarm name
+
+    modal.find('.modal-header h2').text('Modify Alarm'); // set modal title
+    modal.find('inputAlarmName').text(oldAlarm.getName()); // set alarm name
+
+    // hours are stored in 24-hour format, so the values need to be converted and AM/PM derived
     if (oldAlarm.getHour() < 13){
         var hour = oldAlarm.getHour();
         if (oldAlarm.getHour() === 12){
@@ -179,17 +185,40 @@ $(document).on("click", "[name='modifybutton']", function () {
         var hour = oldAlarm.getHour() - 12;
         var AMPM = "PM";
     }
-    modal.find('select-hour').value = hour; // hour
-    modal.find('select-minute').value = oldAlarm.getMinute(); // minute
-    modal.find('select-hour').value = AMPM; // AM/PM
-    modal.find('select-freq').value = oldAlarm.getFreq(); // frequency
-    // TODO: populate checkboxes for each day (may need to base off of frequency)
-    // checkboxes -- oldAlarm.getDayFlags();
+    modal.find('select-hour').value = hour; // set hour
+
+    modal.find('select-minute').value = oldAlarm.getMinute(); // set minute
+    modal.find('select-hour').value = AMPM; // set AM/PM
+    modal.find('select-freq').value = oldAlarm.getFreq(); // set frequency
+
+    var dayArray = oldAlarm.getDaysOfWeek();
+    // set checkboxes for days of the week
+    for (var i = 1; i <= 7; i++) {
+        if (dayArray[i-1].value === true){
+            modal.find('inlineCheckbox'+i).prop('checked', true);
+        }
+    }
     modal.find('.modal-footer button').text('Modify!'); // submit button
-    $('#add-alarm-modal').modal('toggle');
+    $('#add-alarm-modal').modal('show');
 });
 
-// TODO: change modal back to Add Alarm if the modal close button is pressed
+/**
+ * Resets the add-alarm-modal on hide/close.
+ */
+// TODO: figure out why this *permanently* resets the modal
+$('#add-alarm-modal').on('hidden.bs.modal', function () {
+    $(this).find('select').prop('selectedIndex',0); // reset drop-down selection fields
+    $(this).find('input').val(''); // reset input fields (alarm name)
+
+    // TODO: the resetting doesn't work
+    // reset checkboxes
+    for (var i = 1; i <= 7; i++) {
+        $(this).find('inlineCheckbox'+i).prop('checked', false);
+    }
+
+    $(this).find('.modal-header h2').text('Add Alarm'); // reset modal title
+    $(this).find('.modal-footer button').text('Add Alarm!'); // reset modal submit button
+});
 
 /**
  * Returns the Alarm Frequency Enum associated with the string
