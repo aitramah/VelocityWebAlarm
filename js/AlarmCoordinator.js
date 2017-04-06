@@ -64,7 +64,7 @@ var AlarmCoordinator = (function() {
      * for it to go off.
      */
    this.checkAlarms = function() {
-       console.log("-----checkAlarms-----");
+       console.log("---------checkAlarms---------");
         var today = new Date();
 
         // Current Time Variables
@@ -72,32 +72,34 @@ var AlarmCoordinator = (function() {
         var m = today.getMinutes();
         var weekday = today.getDay();
 
-       console.log("alarmList length = "+alarmList.length);
+        console.log("alarmList length = "+ alarmList.length);
         for(i = 0; i < alarmList.length; i++) {
-
+            var theAlarm = alarmList[i];
             // Conditional statement that checks whether the day, hour, and minute are
             // correct for the alarm to go off
-            if(alarmList[i].getDaysOfWeek()[weekday] && alarmList[i].getHour() === h && m === alarmList[i].getMinute()) {
+            if(theAlarm.getDaysOfWeek()[weekday] && theAlarm.getHour() === h && m === theAlarm.getMinute()) {
 
-                var alarmFrequency = alarmList[i].getFreq();
-                if(alarmFrequency > 0){
-                    if(alarmList[i].getDayFlags()[weekday])
+
+                var alarmFrequency = theAlarm.getFreq();
+                if(alarmFrequency > 0) {
+                    if(theAlarm.getDayFlags()[weekday])
                         continue;
                     else
-                        alarmList[i].setDayFlags(weekday);
+                        theAlarm.setDayFlags(weekday);
                 }
 
                 // Push alarm that is going off to wait-to-be-dismissed list
-                pendingDismissal.push(alarmList[i]);
-                triggerAlarm(alarmList[i]);
+                pendingDismissal.push(theAlarm);
+                triggerAlarm(theAlarm);
 
                 if(alarmFrequency == 0) {
-                    removeElementFromAlarmList(alarmList[i].getUUID());
+                    removeElementFromAlarmList(theAlarm.getUUID());
                     alarmList.splice(i, 1);
                     i--;
                 }
 
             }
+            console.log("-------end checkAlarms-------");
         }
 
 
@@ -107,7 +109,7 @@ var AlarmCoordinator = (function() {
         if(alarmList.length > 0){
             setTimeout(this.checkAlarms, 500); //Check every half second
         }
-    };
+   };
 
     /**
      * If the alarm list is not empty or undefined, this function stores alarms that have
@@ -118,16 +120,8 @@ var AlarmCoordinator = (function() {
         localStorage.removeItem("alarms");
         if(alarmList !== null && alarmList.length > 0) {
             var toSave = JSON.stringify(alarmList);
-            console.log("About to save: \n" + toSave);
-            console.log("first alarm name: " + alarmList[0].getName());
             localStorage.setItem("alarms", toSave);
-
         }
-
-        //TESTING
-        var obj = localStorage.getItem("alarms");
-        console.log("In cache: \n" + obj);
-
     };
 
     /**

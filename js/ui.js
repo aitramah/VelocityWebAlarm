@@ -66,7 +66,8 @@ function removeElementFromAlarmList(alarmID) {
  * @param alarm
  */
 function triggerAlarm(alarm) {
-    console.log("------triggerAlarmDisplay------");
+    console.log("--------triggerAlarm--------");
+
 
     // Create and Play Audio Object
     document.getElementById('alarmFile').play();
