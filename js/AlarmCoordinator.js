@@ -70,7 +70,7 @@ var AlarmCoordinator = (function() {
      * for it to go off.
      */
    this.checkAlarms = function() {
-       console.log("---------checkAlarms---------");
+        console.log("---------checkAlarms---------");
         var today = new Date();
 
         // Current Time Variables
@@ -108,7 +108,8 @@ var AlarmCoordinator = (function() {
         this.gracefulAlarmTrigger();
         this.storeAlarmsInCache();
 
-        setTimeout(this.checkAlarms, 500); //Check every 5 seconds
+        setTimeout(this.checkAlarms, 500); //Check every 0.5 seconds
+
    };
 
     /**
