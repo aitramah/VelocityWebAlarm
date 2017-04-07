@@ -60,12 +60,12 @@ function Alarm(daysOfWeek, hour, min, frequency, name) {
         mUuid = id;
     };
 
-    this.getDayFlags = function() {
+    this.getDayFlags = function () {
         return mDayFlags;
     };
 
-    this.setDayFlags = function(dayIndex) {
-        for(i = 0; i < mDayFlags.length; i++){
+    this.setDayFlags = function (dayIndex) {
+        for (i = 0; i < mDayFlags.length; i++) {
             mDayFlags[i] = false;
         }
         mDayFlags[dayIndex] = true;
@@ -77,9 +77,10 @@ function Alarm(daysOfWeek, hour, min, frequency, name) {
      *
      * @returns {{uuid: string, daysOfWeek: *, hour: *, min: *, frequency: *, name: *}}
      */
-    this.toJSON = function() {
+    this.toJSON = function () {
         console.log('toJSON');
-        return {"daysOfWeek": mDaysOfWeek,
+        return {
+            "daysOfWeek": mDaysOfWeek,
             "hour": mHour,
             "min": mMin,
             "frequency": mFrequency,

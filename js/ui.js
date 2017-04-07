@@ -9,7 +9,7 @@
  */
 function populateListUIFromArray(alarms) {
 
-    const WEEKDAY_ABR = ['Sunday',
+    const WEEKDAY_ABR = ['Sun',
         'Mon',
         'Tue',
         'Wed',
@@ -20,7 +20,7 @@ function populateListUIFromArray(alarms) {
     var alarmList = $('#alarm-list');
 
     // For each alarm held in the coordinator, create a list element
-    for(var i = 0; i < alarms.length; i++) {
+    for (var i = 0; i < alarms.length; i++) {
         var alarm = alarms[i];
 
         //For repeating alarms obtain the days it runs as a series of labels
@@ -28,7 +28,7 @@ function populateListUIFromArray(alarms) {
         if (alarm.getFreq() === AlarmFrequency.WEEKLY) {
             stringOfLabels += "<hr style='margin-top: 2px; margin-bottom: 6px'>";
             var days = alarm.getDaysOfWeek();
-            for(var day = 0; day < days.length; day++) { //Check if enabled for that day
+            for (var day = 0; day < days.length; day++) { //Check if enabled for that day
                 if (days[day] === true) {
                     stringOfLabels += "<span class='label label-default'>" + WEEKDAY_ABR[day] + "</span>" //Append day's label
                 }
@@ -39,13 +39,13 @@ function populateListUIFromArray(alarms) {
         if ($('#' + alarm.getUUID()).length == 0) {
             console.log(alarm.getUUID());
             //Add alarm to list
-            alarmList.append("<a href='#' class='list-group-item' id='" + alarm.getUUID() + "'>"+
+            alarmList.append("<a href='#' class='list-group-item' id='" + alarm.getUUID() + "'>" +
                 "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
                 "<button type='button' class='btn btn-primary-transparent' name='modifybutton' id='modify-alarm-button'>" +
                 "<img id='modify-alarm-button-image' src='images/edit-alarm-button.png'>" +
                 "<span class='pull-right'></span></button>" +
                 "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
-                "<h2 class='list-group-item-heading'>" + alarm.getHour() + ":"+padTime(alarms[i].getMinute()) + "</h2>" +
+                "<h2 class='list-group-item-heading'>" + alarm.getHour() + ":" + padTime(alarms[i].getMinute()) + "</h2>" +
                 stringOfLabels + "</a>");
         }
     }
@@ -58,7 +58,6 @@ function removeElementFromAlarmList(alarmID) {
 // ------------ UI Event Listeners -------------- \\
 
 $(document).ready(function () {
-
     // Initialize Hours of Dropdown
     $(function () {
         for (var i = 1; i <= 12; i++) {
@@ -132,17 +131,17 @@ $('#submit-alarm').click(function () {
     var alarm = new Alarm(daysOfWeek, hour, min, freq, alarmName);
     var ac = new AlarmCoordinator();
 
-    if ($('h2[id="alarm-modal-title"]').val() === 'Add Alarm'){
+    if ($("#alarm-modal-title").val() === 'Add Alarm') {
         ac.addNewAlarm(alarm);
     }
     else {
+        console.log("set freq 2: ", $("#select-freq").val());
         ac.changeAlarm(oldAlarmID, alarm); // param1 = old alarm, param2 = new alarm
-        // TODO: old alarm is still visible in the alarm list (refreshing page fixes it)
-        // TODO: newly added alarm is not being saved correctly (refresh page, then click on alarm to see issue)
+        removeElementFromAlarmList(oldAlarmID);
+        resetModal();
     }
 
     $('#add-alarm-modal').modal('hide');
-
     populateListUIFromArray(ac.getAlarms());
 });
 
@@ -153,6 +152,7 @@ $(document).on("click", "[name='closebutton']", function () {
     var id = $(this).parent().attr('id');
     removeElementFromAlarmList(id);
     (new AlarmCoordinator).removeAlarm(id);
+    return false; // to prevent webpage from scrolling back to top
 });
 
 var oldAlarmID; // global variable to hold the oldAlarmID for modifying an existing alarm
@@ -166,18 +166,16 @@ $(document).on("click", "[name='modifybutton']", function () {
     oldAlarmID = $(this).parent().attr('id');
     var oldAlarm = (new AlarmCoordinator).getAlarmByID(oldAlarmID); // param = selected alarm ID
 
-    var modal = $('#add-alarm-modal');
-
-    modal.find('.modal-header h2').text('Modify Alarm'); // set modal title
-    modal.find('inputAlarmName').text(oldAlarm.getName()); // set alarm name
+    $("#alarm-modal-title").text('Modify Alarm'); // set modal title
+    $("#inputAlarmName").val(oldAlarm.getName()); // set alarm name
 
     // hours are stored in 24-hour format, so the values need to be converted and AM/PM derived
-    if (oldAlarm.getHour() < 13){
+    if (oldAlarm.getHour() < 13) {
         var hour = oldAlarm.getHour();
-        if (oldAlarm.getHour() === 12){
+        if (oldAlarm.getHour() === 12) {
             var AMPM = "PM";
         }
-        else{
+        else {
             var AMPM = "AM";
         }
     }
@@ -185,40 +183,69 @@ $(document).on("click", "[name='modifybutton']", function () {
         var hour = oldAlarm.getHour() - 12;
         var AMPM = "PM";
     }
-    modal.find('select-hour').value = hour; // set hour
 
-    modal.find('select-minute').value = oldAlarm.getMinute(); // set minute
-    modal.find('select-hour').value = AMPM; // set AM/PM
-    modal.find('select-freq').value = oldAlarm.getFreq(); // set frequency
+    $("#select-hour").val(hour); // set hour
 
-    var dayArray = oldAlarm.getDaysOfWeek();
-    // set checkboxes for days of the week
-    for (var i = 1; i <= 7; i++) {
-        if (dayArray[i-1].value === true){
-            modal.find('inlineCheckbox'+i).prop('checked', true);
-        }
+    // TODO: get minute dropdown working
+    var minute = oldAlarm.getMinute();
+    console.log("minute from old: ", minute);
+    console.log("minute from old: ", Number(minute));
+    $("#select-minute").val(Number(minute)); // set minute
+    console.log("minute set: ", $("#select-minute").val());
+    
+    $("#select-ampm").val(AMPM); // set AMPM
+
+    // set frequency
+    if (oldAlarm.getFreq() === 1){
+        $("#select-freq").val("Daily");
     }
-    modal.find('.modal-footer button').text('Modify!'); // submit button
+    else if (oldAlarm.getFreq() === 2){
+        $("#select-freq").val("Weekly");
+        var dayArray = oldAlarm.getDaysOfWeek();
+        // set checkboxes for days of the week
+        for (var i = 1; i <= 7; i++) {
+            if (dayArray[i - 1] === true) {
+                $("#inlineCheckbox" + i).prop('checked', true);
+            }
+        }
+        $('#weekly-label').removeClass('hidden');
+        $('#weekly-line').removeClass('hidden');
+        $('#daysInput').removeClass('hidden');
+    }
+    else if (oldAlarm.getFreq() === 0){
+        $("#select-freq").val("Once");
+    }
+
+    $("#submit-alarm").text('Modify!'); // submit button
     $('#add-alarm-modal').modal('show');
+    return false; // to prevent webpage from scrolling back to top
 });
 
 /**
- * Resets the add-alarm-modal on hide/close.
+ * Listens for the modal close button to be clicked and resets the modal.
  */
-// TODO: figure out why this *permanently* resets the modal
-$('#add-alarm-modal').on('hidden.bs.modal', function () {
-    $(this).find('select').prop('selectedIndex',0); // reset drop-down selection fields
-    $(this).find('input').val(''); // reset input fields (alarm name)
-
-    // TODO: the resetting doesn't work
-    // reset checkboxes
-    for (var i = 1; i <= 7; i++) {
-        $(this).find('inlineCheckbox'+i).prop('checked', false);
-    }
-
-    $(this).find('.modal-header h2').text('Add Alarm'); // reset modal title
-    $(this).find('.modal-footer button').text('Add Alarm!'); // reset modal submit button
+$(document).on("click", "[id='closeModal']", function () {
+    resetModal();
 });
+
+function resetModal() {
+    $("#alarm-modal-title").text('Add Alarm'); // reset modal title text
+    $("#inputAlarmName").val(''); // reset alarm name
+    $("#select-hour").val('1'); // reset hour to 1
+    $("#select-minute").val('00'); // reset minute to 00
+    $("#select-ampm").val('AM'); // reset to AM
+    $("#select-freq").val("Once"); // reset to Once
+
+    // reset all checkboxes to unchecked and hide them
+    for (var i = 1; i <= 7; i++) {
+        $("#inlineCheckbox" + i).prop('checked', false);
+    }
+    $('#weekly-label').addClass('hidden');
+    $('#weekly-line').addClass('hidden');
+    $('#daysInput').addClass('hidden');
+
+    $("#submit-alarm").text('Add Alarm!'); // reset submit button text
+}
 
 /**
  * Returns the Alarm Frequency Enum associated with the string

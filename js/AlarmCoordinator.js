@@ -5,7 +5,7 @@
 
 const DEFAULT_ALARM_NAME = "Generic Alarm Name";
 
-var AlarmCoordinator = (function() {
+var AlarmCoordinator = (function () {
     var alarmList = [];
     var instance;
 
@@ -17,7 +17,7 @@ var AlarmCoordinator = (function() {
         if (typeof instance == 'undefined') {
             console.log("instance undefined");
             this.readAlarmsInCache();
-            if(alarmList != 'undefined' && alarmList.length >0)
+            if (alarmList != 'undefined' && alarmList.length > 0)
                 setTimeout(this.checkAlarms, 500);
 
             instance = this;
@@ -30,14 +30,14 @@ var AlarmCoordinator = (function() {
      * also starts the checkAlarms method.
      * @param alarm Alarm to be checked.
      */
-    this.addNewAlarm = function(alarm){
+    this.addNewAlarm = function (alarm) {
         console.log("AlarmCoordinator.prototype.addNewAlarm");
         console.log("new alarm: " + JSON.stringify(alarm));
         alarmList.push(alarm);
         console.log("Contents of AlarmList: ");
 
-        for(var i=0; i<alarmList.length; i++) {
-            console.log("ALARM "+i+"\n"+JSON.stringify(alarmList[i]));
+        for (var i = 0; i < alarmList.length; i++) {
+            console.log("ALARM " + i + "\n" + JSON.stringify(alarmList[i]));
         }
 
         this.storeAlarmsInCache();
@@ -56,7 +56,7 @@ var AlarmCoordinator = (function() {
      * is not put in the updated list is if it is non-repeating and it is time
      * for it to go off.
      */
-    this.checkAlarms = function() {
+    this.checkAlarms = function () {
         var alarmLength = alarmList.length;
         var today = new Date();
         var newArray = [];
@@ -66,7 +66,7 @@ var AlarmCoordinator = (function() {
         var m = today.getMinutes();
         var weekday = today.getDay();
 
-        for(i = 0; i < alarmLength; i++){
+        for (i = 0; i < alarmLength; i++) {
             var tempAlarm = alarmList[i];
 
             // Alarm Variables
@@ -78,12 +78,12 @@ var AlarmCoordinator = (function() {
 
             // Conditional statement that checks whether the day, hour, and minute are
             // correct for the alarm to go off.
-            if(!alarmDays[weekday] || alarmHour !== h) {
+            if (!alarmDays[weekday] || alarmHour !== h) {
                 newArray.push(tempAlarm);
             }
-            else if(m === alarmMinute){
-                if(alarmFrequency > 0){
-                    if(dayFlags[weekday]){
+            else if (m === alarmMinute) {
+                if (alarmFrequency > 0) {
+                    if (dayFlags[weekday]) {
                         continue;
                     }
                     else {
@@ -104,17 +104,17 @@ var AlarmCoordinator = (function() {
                 });
 
                 // Stop Audio Object
-                document.getElementById("alarmDialogueButton").onclick = function() {
+                document.getElementById("alarmDialogueButton").onclick = function () {
                     $('#alarmDialogueModal').modal('toggle');
                     document.getElementById('alarmFile').pause();
                 };
 
-                if(alarmFrequency == 0) {
+                if (alarmFrequency == 0) {
                     removeElementFromAlarmList(tempAlarm.getUUID())
                 }
 
             }
-            else{
+            else {
                 newArray.push(tempAlarm);
             }
         }
@@ -124,7 +124,7 @@ var AlarmCoordinator = (function() {
         alarmList = newArray;
 
         // Restart the Function and check again
-        if(alarmList.length > 0){
+        if (alarmList.length > 0) {
             setTimeout(this.checkAlarms, 500); //Check every half second
         }
     };
@@ -133,10 +133,10 @@ var AlarmCoordinator = (function() {
      * If the alarm list is not empty or undefined, this function stores alarms that have
      * been created during this session (and perhaps previous ones) in the cache
      */
-    this.storeAlarmsInCache = function()  {
+    this.storeAlarmsInCache = function () {
         console.log("AlarmCoordinator.prototype.storeAlarmsInCache");
         localStorage.removeItem("alarms");
-        if(alarmList !== null && alarmList.length > 0) {
+        if (alarmList !== null && alarmList.length > 0) {
             var toSave = JSON.stringify(alarmList);
             console.log("About to save: \n" + toSave);
             console.log("first alarm name: " + alarmList[0].getName());
@@ -156,8 +156,8 @@ var AlarmCoordinator = (function() {
      * @returns {boolean}
      */
     function isEmpty(obj) {
-        for(var prop in obj) {
-            if(obj.hasOwnProperty(prop))
+        for (var prop in obj) {
+            if (obj.hasOwnProperty(prop))
                 return false;
         }
 
@@ -168,14 +168,14 @@ var AlarmCoordinator = (function() {
      * Read any stored alarms from the cache
      */
     //AlarmCoordinator.prototype.
-    this.readAlarmsInCache = function() {
+    this.readAlarmsInCache = function () {
 
         // get whatever has been cached
         var cachedContents = localStorage.getItem('alarms') || null;
         console.log("cached contents: " + cachedContents);
 
         // If something was retrieved
-        if(cachedContents !== null) {
+        if (cachedContents !== null) {
 
             // Read the JSON array
             var tempList = JSON.parse(cachedContents);
@@ -196,9 +196,9 @@ var AlarmCoordinator = (function() {
 
     };
 
-    this.getAlarms = function() {
-        for(var i = 0; i < alarmList.length; i++) {
-            console.log("alarmList["+i+"] : " + JSON.stringify(alarmList[i]));
+    this.getAlarms = function () {
+        for (var i = 0; i < alarmList.length; i++) {
+            console.log("alarmList[" + i + "] : " + JSON.stringify(alarmList[i]));
         }
         return alarmList.slice();
     };
@@ -227,7 +227,7 @@ var AlarmCoordinator = (function() {
      */
     this.changeAlarm = function (oldAlarmID, newAlarm) {
         removeAlarm(oldAlarmID);
-        addNewAlarm(newAlarm)
+        addNewAlarm(newAlarm);
     };
 
     /**

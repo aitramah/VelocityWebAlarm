@@ -65,11 +65,11 @@
 
 <!-- Add alarm dialog box
 ================================================== -->
-<div class="modal fade" id="add-alarm-modal" tabindex="-1" role="dialog">
+<div class="modal fade" id="add-alarm-modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <button id="closeModal" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h2 id="alarm-modal-title" class="modal-title" align="center">Add Alarm</h2>
             </div>
             <div class="modal-body" id="add-alarm-body">
@@ -95,14 +95,14 @@
 
                     </div>
                     <div class="col-xs-3">
-                        <label for="select-min">Am/Pm</label>
+                        <label for="select-ampm">Am/Pm</label>
                         <select class="form-control" id="select-ampm">
                             <option>AM</option>
                             <option>PM</option>
                         </select>
                     </div>
                     <div class="col-xs-3">
-                        <label for="select-min">Frequency</label>
+                        <label for="select-freq">Frequency</label>
                         <select class="form-control" id="select-freq">
                             <option>Once</option>
                             <option>Daily</option>
