@@ -8,10 +8,17 @@ const DEFAULT_SNOOZE_MINUTES = 1;
 
 var AlarmCoordinator = (function() {
 
-    // Holds list of alarms to go off
+    // Holds list of all alarms to go off
     var alarmList = [];
 
+    // Single instance of AlarmCoordinator (singleton)
     var instance;
+
+    // TODO Modify These Comments
+    // "Semaphore" Designed to Allow Alarms to Go Off Gracefully
+    // sem = -1, if No Alarm is in the process of going off
+    // sem = Alarm.mUuid, if an alarm is currently in the process of going off
+    var mutex = false;
 
     // Holds alarms in the process of going off or being snoozed
     var pendingDismissal = [];
@@ -90,7 +97,7 @@ var AlarmCoordinator = (function() {
 
                 // Push alarm that is going off to wait-to-be-dismissed list
                 pendingDismissal.push(theAlarm);
-                triggerAlarm(theAlarm);
+                triggerAlarm(theAlarm); // TODO Refactor this call to triggerAlarm
 
                 if(alarmFrequency == 0) {
                     removeElementFromAlarmList(theAlarm.getUUID());
@@ -248,6 +255,27 @@ var AlarmCoordinator = (function() {
             }
         }
 
+    };
+
+    /**
+     * This function works in tandem with the variable "mutex" to ensure
+     * graceful alarm triggering.
+     *
+     * Functionality
+     * 1a. Checks mutex to see that there is no alarm currently being triggered
+     * 1b Checks to make sure that pendingDismissal array isn't empty
+     * 2. If these conditions are met, the mutex is set to true
+     * 3. The first element of the pending dismissal array will be popped off
+     * and sent to the trigger function
+     * 4. The mutex will eventually be set back to false once the dismiss or snooze
+     * button is called
+     */
+    this.gracefulAlarmTrigger = function() {
+        if(!mutex && pendingDismissal.length > 0) {
+            mutex = true;
+            var nextAlarm = pendingDismissal.shift();
+            triggerAlarm(nextAlarm);
+        }
     };
 
     return AlarmCoordinator;
