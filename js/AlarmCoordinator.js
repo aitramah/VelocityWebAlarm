@@ -14,10 +14,9 @@ var AlarmCoordinator = (function() {
     // Single instance of AlarmCoordinator (singleton)
     var instance;
 
-    // TODO Modify These Comments
-    // "Semaphore" Designed to Allow Alarms to Go Off Gracefully
-    // sem = -1, if No Alarm is in the process of going off
-    // sem = Alarm.mUuid, if an alarm is currently in the process of going off
+    // "Mutex" Designed to Allow Alarms to Go Off Gracefully
+    // mutex = false, if No Alarm is in the process of going off
+    // mutex = true, if an alarm is currently in the process of going off
     var mutex = false;
 
     // Holds alarms in the process of going off or being snoozed
@@ -265,7 +264,7 @@ var AlarmCoordinator = (function() {
      * 1a. Checks mutex to see that there is no alarm currently being triggered
      * 1b Checks to make sure that pendingDismissal array isn't empty
      * 2. If these conditions are met, the mutex is set to true
-     * 3. The first element of the pending dismissal array will be popped off
+     * 3. The first element of the pending dismissal array will be obtained
      * and sent to the trigger function
      * 4. The mutex will eventually be set back to false once the dismiss or snooze
      * button is called
@@ -273,7 +272,7 @@ var AlarmCoordinator = (function() {
     this.gracefulAlarmTrigger = function() {
         if(!mutex && pendingDismissal.length > 0) {
             mutex = true;
-            var nextAlarm = pendingDismissal.shift();
+            var nextAlarm = pendingDismissal[0]; // Get the first element of the array
             triggerAlarm(nextAlarm);
         }
     };
