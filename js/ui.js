@@ -240,6 +240,8 @@ $(document).on("click", "[name='modifybutton']", function () {
  * Listens for the modal close button to be clicked and resets the modal.
  */
 $(document).on("click", "[id='closeModal']", function () {
+    oldAlarmID = "";
+
     resetModal();
 });
 
