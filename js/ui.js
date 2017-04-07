@@ -33,6 +33,8 @@ function populateListUIFromArray(alarms) {
                     stringOfLabels += "<span class='label label-default'>" + WEEKDAY_ABR[day] + "</span>" //Append day's label
                 }
             }
+        } else if (alarm.getFreq() == AlarmFrequency.DAILY){
+            stringOfLabels += "<hr style='margin-top: 2px; margin-bottom: 6px'><span class='label label-default'>Daily</span>";
         }
 
         // If there are no elements corresponding to the alarm's UUID
@@ -144,6 +146,12 @@ $('#submit-alarm').click(function () {
     $('#add-alarm-modal').modal('hide');
     populateListUIFromArray(ac.getAlarms());
 });
+
+// Stop Audio Object
+$($("#alarmDialogueButton").click(function() {
+    $('#alarmDialogueModal').modal('toggle');
+    document.getElementById('alarmFile').pause();
+}));
 
 /**
  * Listens for button to be clicked on and removes alarm from ui and list.

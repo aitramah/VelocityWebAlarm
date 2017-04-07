@@ -55,6 +55,8 @@ var AlarmCoordinator = (function () {
      * assigning it to alarmList before execution completes. The only time an alarm
      * is not put in the updated list is if it is non-repeating and it is time
      * for it to go off.
+     *
+     * Multiple, Daily, and Weekly Alarms Verified ~ Aidan.
      */
     this.checkAlarms = function () {
         var alarmLength = alarmList.length;
@@ -103,14 +105,11 @@ var AlarmCoordinator = (function () {
                     show: true
                 });
 
-                // Stop Audio Object
-                document.getElementById("alarmDialogueButton").onclick = function () {
-                    $('#alarmDialogueModal').modal('toggle');
-                    document.getElementById('alarmFile').pause();
-                };
-
-                if (alarmFrequency == 0) {
+                if(alarmFrequency == 0) {
                     removeElementFromAlarmList(tempAlarm.getUUID())
+                    alarmList.splice(i, 1);
+                    i--;
+                    this.storeAlarmsInCache();
                 }
 
             }
