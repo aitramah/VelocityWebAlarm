@@ -84,8 +84,6 @@ var AlarmCoordinator = (function() {
             // Conditional statement that checks whether the day, hour, and minute are
             // correct for the alarm to go off
             if(theAlarm.getDaysOfWeek()[weekday] && theAlarm.getHour() === h && m === theAlarm.getMinute()) {
-
-
                 var alarmFrequency = theAlarm.getFreq();
                 if(alarmFrequency > 0) {
                     if(theAlarm.getDayFlags()[weekday])
@@ -96,7 +94,6 @@ var AlarmCoordinator = (function() {
 
                 // Push alarm that is going off to wait-to-be-dismissed list
                 pendingDismissal.push(theAlarm);
-                triggerAlarm(theAlarm); // TODO Refactor this call to triggerAlarm
 
                 if(alarmFrequency == 0) {
                     removeElementFromAlarmList(theAlarm.getUUID());
@@ -108,13 +105,10 @@ var AlarmCoordinator = (function() {
             console.log("-------end checkAlarms-------");
         }
 
+        this.gracefulAlarmTrigger();
+        this.storeAlarmsInCache();
 
-       this.storeAlarmsInCache();
-
-        // Restart the Function and check again
-        if(alarmList.length > 0){
-            setTimeout(this.checkAlarms, 500); //Check every half second
-        }
+        setTimeout(this.checkAlarms, 500); //Check every half second
    };
 
     /**
@@ -226,6 +220,7 @@ var AlarmCoordinator = (function() {
      * @param alarmID
      */
     this.dismissAlarm = function(alarmID) {
+        mutex = false;
 
         console.log("-----dismissAlarm-----");
         for(var i=0; i <pendingDismissal.length; i++) {
@@ -245,11 +240,16 @@ var AlarmCoordinator = (function() {
         console.log("-----snoozeAlarm-----");
         console.log(alarmID);
 
+        mutex = false;
+
         // Check to find the alarm to be snoozed
         for(var i=0; i <pendingDismissal.length; i++) {
-            // If the alarm is found, set a time out for the modal to appear
+            // If the alarm is found, remove it from the pendingDismissal array temporarily
+            // and set a timeout to put it in the back of the array after a specified amount of time
             if(pendingDismissal[i].getUUID() == alarmID) {
-                setTimeout(function() { triggerAlarm(pendingDismissal[i]); }, DEFAULT_SNOOZE_MINUTES*60000);
+                var rescheduledAlarm = pendingDismissal[i];
+                pendingDismissal.splice(i, 1);
+                setTimeout(function() { pendingDismissal.push(rescheduledAlarm); }, DEFAULT_SNOOZE_MINUTES*60000);
                 return;
             }
         }
