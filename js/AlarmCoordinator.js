@@ -14,12 +14,11 @@ var AlarmCoordinator = (function () {
      */
     function AlarmCoordinator() {
         console.log("AlarmCoordinator()");
-        if (typeof instance == 'undefined') {
-            console.log("instance undefined");
+        if (typeof instance === 'undefined') {
+            console.log("CREATING NEW ALARMCOORDINATOR");
             this.readAlarmsInCache();
-            if (alarmList != 'undefined' && alarmList.length > 0)
+            if (alarmList !== 'undefined' && alarmList.length > 0)
                 setTimeout(this.checkAlarms, 500);
-
             instance = this;
         }
         return instance;
@@ -31,18 +30,20 @@ var AlarmCoordinator = (function () {
      * @param alarm Alarm to be checked.
      */
     this.addNewAlarm = function (alarm) {
-        console.log("AlarmCoordinator.prototype.addNewAlarm");
-        console.log("new alarm: " + JSON.stringify(alarm));
-        alarmList.push(alarm);
-        console.log("Contents of AlarmList: ");
+        console.log("AlarmCoordinator.addNewAlarm :: adding new alarm");
+        console.log("New Alarm: " + JSON.stringify(alarm));
 
+        alarmList.push(alarm);
+
+        console.log("Contents of AlarmList: ");
         for (var i = 0; i < alarmList.length; i++) {
             console.log("ALARM " + i + "\n" + JSON.stringify(alarmList[i]));
         }
 
         this.storeAlarmsInCache();
 
-        setTimeout(this.checkAlarms, 500);
+        if (alarmList.length === 1)
+            setTimeout(this.checkAlarms, 500);
     };
 
     /**
@@ -59,7 +60,6 @@ var AlarmCoordinator = (function () {
      * Multiple, Daily, and Weekly Alarms Verified ~ Aidan.
      */
     this.checkAlarms = function () {
-        var alarmLength = alarmList.length;
         var today = new Date();
         var newArray = [];
 
@@ -68,7 +68,7 @@ var AlarmCoordinator = (function () {
         var m = today.getMinutes();
         var weekday = today.getDay();
 
-        for (i = 0; i < alarmLength; i++) {
+        for (i = 0; i < alarmList.length; i++) {
             var tempAlarm = alarmList[i];
 
             // Alarm Variables
@@ -85,16 +85,17 @@ var AlarmCoordinator = (function () {
             }
             else if (m === alarmMinute) {
                 if (alarmFrequency > 0) {
+                    newArray.push(tempAlarm);
+
                     if (dayFlags[weekday]) {
                         continue;
                     }
                     else {
                         tempAlarm.setDayFlags(weekday);
-                        newArray.push(tempAlarm);
                     }
                 }
 
-                // Create  and Play Audio Object
+                // Create and Play Audio Object
                 document.getElementById('alarmFile').play();
 
                 // Name Editing
@@ -105,13 +106,12 @@ var AlarmCoordinator = (function () {
                     show: true
                 });
 
-                if(alarmFrequency == 0) {
-                    removeElementFromAlarmList(tempAlarm.getUUID())
+                if(alarmFrequency === 0) {
+                    removeElementFromAlarmList(tempAlarm.getUUID());
                     alarmList.splice(i, 1);
                     i--;
                     this.storeAlarmsInCache();
                 }
-
             }
             else {
                 newArray.push(tempAlarm);
@@ -133,20 +133,13 @@ var AlarmCoordinator = (function () {
      * been created during this session (and perhaps previous ones) in the cache
      */
     this.storeAlarmsInCache = function () {
-        console.log("AlarmCoordinator.prototype.storeAlarmsInCache");
+        console.log("AlarmCoordinator.storeAlarmsInCache :: storing alarms");
         localStorage.removeItem("alarms");
         if (alarmList !== null && alarmList.length > 0) {
             var toSave = JSON.stringify(alarmList);
-            console.log("About to save: \n" + toSave);
-            console.log("first alarm name: " + alarmList[0].getName());
             localStorage.setItem("alarms", toSave);
 
         }
-
-        //TESTING
-        var obj = localStorage.getItem("alarms");
-        console.log("In cache: \n" + obj);
-
     };
 
     /**
@@ -168,10 +161,9 @@ var AlarmCoordinator = (function () {
      */
     //AlarmCoordinator.prototype.
     this.readAlarmsInCache = function () {
-
         // get whatever has been cached
         var cachedContents = localStorage.getItem('alarms') || null;
-        console.log("cached contents: " + cachedContents);
+        console.log("AlarmCoordinator.readAlarmsInCache :: loaded cached contents: " + cachedContents);
 
         // If something was retrieved
         if (cachedContents !== null) {
@@ -195,9 +187,13 @@ var AlarmCoordinator = (function () {
 
     };
 
+    /**
+     * Retrieves alarmList
+     * @returns {Array.<*>}
+     */
     this.getAlarms = function () {
         for (var i = 0; i < alarmList.length; i++) {
-            console.log("alarmList[" + i + "] : " + JSON.stringify(alarmList[i]));
+            //console.log("alarmList[" + i + "] : " + JSON.stringify(alarmList[i]));
         }
         return alarmList.slice();
     };
@@ -207,17 +203,16 @@ var AlarmCoordinator = (function () {
      * @param uuid
      */
     this.removeAlarm = function (uuid) {
-        console.log(alarmList);
+        console.log("AlarmCoordinator.removeAlarm :: removing alarm");
         var newArray = [];
         for (var i = 0; i < alarmList.length; i++) {
-            console.log("index " + i + " uuid: " + alarmList[i].getUUID() + " matching " + uuid);
-            if (alarmList[i].getUUID() != uuid) {
+            //console.log("index " + i + " uuid: " + alarmList[i].getUUID() + " matching " + uuid);
+            if (alarmList[i].getUUID() !== uuid) {
                 newArray.push(alarmList[i]);
             }
         }
         alarmList = newArray;
-
-        console.log(newArray);
+        //console.log(newArray);
         this.storeAlarmsInCache();
     };
 

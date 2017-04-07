@@ -33,13 +33,14 @@ function populateListUIFromArray(alarms) {
                     stringOfLabels += "<span class='label label-default'>" + WEEKDAY_ABR[day] + "</span>" //Append day's label
                 }
             }
-        } else if (alarm.getFreq() == AlarmFrequency.DAILY){
+        } else if (alarm.getFreq() === AlarmFrequency.DAILY){
             stringOfLabels += "<hr style='margin-top: 2px; margin-bottom: 6px'><span class='label label-default'>Daily</span>";
         }
 
         // If there are no elements corresponding to the alarm's UUID
-        if ($('#' + alarm.getUUID()).length == 0) {
-            console.log(alarm.getUUID());
+        var alarmGUI = document.getElementById(alarm.getUUID());
+        if (alarmGUI === null) {
+            //console.log(alarm.getUUID());
             //Add alarm to list
             alarmList.append("<a href='#' class='list-group-item' id='" + alarm.getUUID() + "'>" +
                 "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
@@ -49,6 +50,14 @@ function populateListUIFromArray(alarms) {
                 "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
                 "<h2 class='list-group-item-heading'>" + alarm.getHour() + ":" + padTime(alarms[i].getMinute()) + "</h2>" +
                 stringOfLabels + "</a>");
+        } else {
+            alarmGUI.innerHTML = "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
+            "<button type='button' class='btn btn-primary-transparent' name='modifybutton' id='modify-alarm-button'>" +
+            "<img id='modify-alarm-button-image' src='images/edit-alarm-button.png'>" +
+            "<span class='pull-right'></span></button>" +
+            "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
+            "<h2 class='list-group-item-heading'>" + alarm.getHour() + ":" + padTime(alarms[i].getMinute()) + "</h2>" +
+            stringOfLabels;
         }
     }
 }
@@ -131,17 +140,21 @@ $('#submit-alarm').click(function () {
     }
 
     var alarm = new Alarm(daysOfWeek, hour, min, freq, alarmName);
-    var ac = new AlarmCoordinator();
+    if (oldAlarmID !== "") {
+        alarm.setUUID(oldAlarmID);
+    }
+    var ac = new AlarmCoordinator;
 
-    if ($("#alarm-modal-title").val() === 'Add Alarm') {
+    if (document.getElementById("alarm-modal-title").innerHTML === 'Add Alarm') {
         ac.addNewAlarm(alarm);
     }
     else {
-        console.log("set freq 2: ", $("#select-freq").val());
         ac.changeAlarm(oldAlarmID, alarm); // param1 = old alarm, param2 = new alarm
-        removeElementFromAlarmList(oldAlarmID);
         resetModal();
     }
+
+    // Clear oldAlarmID after possible modification.
+    oldAlarmID = "";
 
     $('#add-alarm-modal').modal('hide');
     populateListUIFromArray(ac.getAlarms());
@@ -163,7 +176,7 @@ $(document).on("click", "[name='closebutton']", function () {
     return false; // to prevent webpage from scrolling back to top
 });
 
-var oldAlarmID; // global variable to hold the oldAlarmID for modifying an existing alarm
+var oldAlarmID = ""; // global variable to hold the oldAlarmID for modifying an existing alarm
 
 /**
  * Listens for the modify button to be clicked and opens the modify alarm modal.
@@ -172,6 +185,7 @@ var oldAlarmID; // global variable to hold the oldAlarmID for modifying an exist
 $(document).on("click", "[name='modifybutton']", function () {
 
     oldAlarmID = $(this).parent().attr('id');
+    console.log("Attempting to modify alarm with id=" + oldAlarmID);
     var oldAlarm = (new AlarmCoordinator).getAlarmByID(oldAlarmID); // param = selected alarm ID
 
     $("#alarm-modal-title").text('Modify Alarm'); // set modal title
