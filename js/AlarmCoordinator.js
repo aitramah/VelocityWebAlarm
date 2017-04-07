@@ -3,11 +3,18 @@
  * Created by Aidan on 2017-03-26.
  */
 
-const DEFAULT_ALARM_NAME = "Generic Alarm Name";
+const DEFAULT_ALARM_NAME = "Alarm";
+const DEFAULT_SNOOZE_MINUTES = 1;
 
-var AlarmCoordinator = (function () {
+var AlarmCoordinator = (function() {
+
+    // Holds list of alarms to go off
     var alarmList = [];
+
     var instance;
+
+    // Holds alarms in the process of going off or being snoozed
+    var pendingDismissal = [];
 
     /**
      * Constructor which returns a Singleton
@@ -25,9 +32,8 @@ var AlarmCoordinator = (function () {
     }
 
     /**
-     * Simple method designed to add an alarm to the alarmList. It
-     * also starts the checkAlarms method.
-     * @param alarm Alarm to be checked.
+     * Simple method designed to add an alarm to the alarmList. It also starts the checkAlarms method.
+     * @param alarm to be checked.
      */
     this.addNewAlarm = function (alarm) {
         console.log("AlarmCoordinator.addNewAlarm :: adding new alarm");
@@ -45,6 +51,7 @@ var AlarmCoordinator = (function () {
         if (alarmList.length === 1)
             setTimeout(this.checkAlarms, 500);
     };
+
 
     /**
      * Obtains the current time and traverses through the list of Alarms
@@ -105,6 +112,9 @@ var AlarmCoordinator = (function () {
                 $('#alarmDialogueModal').modal({
                     show: true
                 });
+                // Push alarm that is going off to wait-to-be-dismissed list
+                pendingDismissal.push(theAlarm);
+                triggerAlarm(theAlarm);
 
                 if(alarmFrequency === 0) {
                     removeElementFromAlarmList(tempAlarm.getUUID());
@@ -138,7 +148,6 @@ var AlarmCoordinator = (function () {
         if (alarmList !== null && alarmList.length > 0) {
             var toSave = JSON.stringify(alarmList);
             localStorage.setItem("alarms", toSave);
-
         }
     };
 
@@ -232,6 +241,41 @@ var AlarmCoordinator = (function () {
             if (alarmList[i].getUUID() === alarmID)
                 return alarmList[i];
         }
+    };
+
+    /**
+     * This function is called once an alarm has been definitely dismissed by the user
+     * @param alarmID
+     */
+    this.dismissAlarm = function(alarmID) {
+
+        console.log("-----dismissAlarm-----");
+        for(var i=0; i <pendingDismissal.length; i++) {
+            if(pendingDismissal[i].getUUID() == alarmID) {
+                pendingDismissal.splice(i, 1);
+                return;
+            }
+        }
+    };
+
+    /**
+     * This function is called to set a snooze on a specific alarm
+     * @param alarmID
+     */
+    this.snoozeAlarm = function(alarmID) {
+
+        console.log("-----snoozeAlarm-----");
+        console.log(alarmID);
+
+        // Check to find the alarm to be snoozed
+        for(var i=0; i <pendingDismissal.length; i++) {
+            // If the alarm is found, set a time out for the modal to appear
+            if(pendingDismissal[i].getUUID() == alarmID) {
+                setTimeout(function() { triggerAlarm(pendingDismissal[i]); }, DEFAULT_SNOOZE_MINUTES*60000);
+                return;
+            }
+        }
+
     };
 
     return AlarmCoordinator;
