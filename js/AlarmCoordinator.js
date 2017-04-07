@@ -108,7 +108,7 @@ var AlarmCoordinator = (function() {
         this.gracefulAlarmTrigger();
         this.storeAlarmsInCache();
 
-        setTimeout(this.checkAlarms, 5000); //Check every 5 seconds
+        setTimeout(this.checkAlarms, 500); //Check every 5 seconds
    };
 
     /**
@@ -273,7 +273,7 @@ var AlarmCoordinator = (function() {
         if(!mutex && pendingDismissal.length > 0) {
             mutex = true;
             var nextAlarm = pendingDismissal[0]; // Get the first element of the array
-            triggerAlarm(nextAlarm);
+            setTimeout(function() { triggerAlarm(nextAlarm); }, 1000);
         }
     };
 
