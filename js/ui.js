@@ -150,13 +150,13 @@ $('#submit-alarm').click(function () {
     }
     else {
         ac.changeAlarm(oldAlarmID, alarm); // param1 = old alarm, param2 = new alarm
-        resetModal();
     }
 
     // Clear oldAlarmID after possible modification.
     oldAlarmID = "";
 
     $('#add-alarm-modal').modal('hide');
+    resetModal();
     populateListUIFromArray(ac.getAlarms());
 });
 
@@ -245,6 +245,9 @@ $(document).on("click", "[id='closeModal']", function () {
     resetModal();
 });
 
+/**
+ * Resets modal to Add Alarm, empties input fields and sets dropdowns to first item.
+ */
 function resetModal() {
     $("#alarm-modal-title").text('Add Alarm'); // reset modal title text
     $("#inputAlarmName").val(''); // reset alarm name
