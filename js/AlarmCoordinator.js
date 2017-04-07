@@ -108,7 +108,7 @@ var AlarmCoordinator = (function() {
         this.gracefulAlarmTrigger();
         this.storeAlarmsInCache();
 
-        setTimeout(this.checkAlarms, 500); //Check every half second
+        setTimeout(this.checkAlarms, 5000); //Check every 5 seconds
    };
 
     /**
