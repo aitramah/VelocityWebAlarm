@@ -185,14 +185,7 @@ $(document).on("click", "[name='modifybutton']", function () {
     }
 
     $("#select-hour").val(hour); // set hour
-
-    // TODO: get minute dropdown working
-    var minute = oldAlarm.getMinute();
-    console.log("minute from old: ", minute);
-    console.log("minute from old: ", Number(minute));
-    $("#select-minute").val(Number(minute)); // set minute
-    console.log("minute set: ", $("#select-minute").val());
-    
+    $("#select-min").val(oldAlarm.getMinute()); // set minute
     $("#select-ampm").val(AMPM); // set AMPM
 
     // set frequency
@@ -232,7 +225,7 @@ function resetModal() {
     $("#alarm-modal-title").text('Add Alarm'); // reset modal title text
     $("#inputAlarmName").val(''); // reset alarm name
     $("#select-hour").val('1'); // reset hour to 1
-    $("#select-minute").val('00'); // reset minute to 00
+    $("#select-min").val('0'); // reset minute to 00
     $("#select-ampm").val('AM'); // reset to AM
     $("#select-freq").val("Once"); // reset to Once
 
