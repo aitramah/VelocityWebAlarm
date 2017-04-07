@@ -78,7 +78,7 @@ function Alarm(daysOfWeek, hour, min, frequency, name) {
      * @returns {{uuid: string, daysOfWeek: *, hour: *, min: *, frequency: *, name: *}}
      */
     this.toJSON = function () {
-        console.log('toJSON');
+        //console.log('toJSON');
         return {
             "daysOfWeek": mDaysOfWeek,
             "hour": mHour,

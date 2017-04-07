@@ -39,12 +39,12 @@ function populateListUIFromArray(alarms) {
 
         // If there are no elements corresponding to the alarm's UUID
         var alarmGUI = document.getElementById(alarm.getUUID());
-        if (alarmGUI === null) {
-            var h = alarms[i].getHour();
-            var suffix = h < 12 ? " am" : " pm";
-            h = h % 12;
-            if (h === 0) h = 12;
+        var h = alarm.getHour();
+        var suffix = h < 12 ? " am" : " pm";
+        h = h % 12;
+        if (h === 0) h = 12;
 
+        if (alarmGUI === null) {
             //Add alarm to list
             alarmList.append("<a href='#' class='list-group-item' id='" + alarm.getUUID() + "'>" +
                 "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
@@ -52,7 +52,7 @@ function populateListUIFromArray(alarms) {
                 "<img id='modify-alarm-button-image' src='images/edit-alarm-button.png'>" +
                 "<span class='pull-right'></span></button>" +
                 "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
-                "<h2 class='list-group-item-heading'>" + h + ":"+padTime(alarms[i].getMinute()) + suffix +"</h2>" +
+                "<h2 class='list-group-item-heading'>" + h + ":"+padTime(alarm.getMinute()) + suffix + "</h2>" +
                 stringOfLabels + "</a>");
         } else {
             alarmGUI.innerHTML = "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
@@ -60,7 +60,7 @@ function populateListUIFromArray(alarms) {
                 "<img id='modify-alarm-button-image' src='images/edit-alarm-button.png'>" +
                 "<span class='pull-right'></span></button>" +
                 "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
-                "<h2 class='list-group-item-heading'>" + h + ":" + padTime(alarms[i].getMinute()) + "</h2>" +
+                "<h2 class='list-group-item-heading'>" + h + ":" + padTime(alarm.getMinute()) + suffix + "</h2>" +
                 stringOfLabels;
         }
 
@@ -78,7 +78,6 @@ function removeElementFromAlarmList(alarmID) {
  */
 function triggerAlarm(alarm) {
     console.log("--------triggerAlarm--------");
-
 
     // Create and Play Audio Object
     document.getElementById('alarmFile').play();

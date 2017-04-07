@@ -68,69 +68,43 @@ var AlarmCoordinator = (function() {
      */
     this.checkAlarms = function () {
         var today = new Date();
-        var newArray = [];
 
         // Current Time Variables
         var h = today.getHours();
         var m = today.getMinutes();
         var weekday = today.getDay();
 
-        for (i = 0; i < alarmList.length; i++) {
-            var tempAlarm = alarmList[i];
-
-            // Alarm Variables
-            var alarmDays = tempAlarm.getDaysOfWeek();
-            var alarmHour = tempAlarm.getHour();
-            var alarmMinute = tempAlarm.getMinute();
-            var alarmFrequency = tempAlarm.getFreq();
-            var dayFlags = tempAlarm.getDayFlags();
-
+        //console.log("alarmList length = "+ alarmList.length);
+        for(i = 0; i < alarmList.length; i++) {
+            var theAlarm = alarmList[i];
             // Conditional statement that checks whether the day, hour, and minute are
-            // correct for the alarm to go off.
-            if (!alarmDays[weekday] || alarmHour !== h) {
-                newArray.push(tempAlarm);
-            }
-            else if (m === alarmMinute) {
-                if (alarmFrequency > 0) {
-                    newArray.push(tempAlarm);
+            // correct for the alarm to go off
+            if(theAlarm.getDaysOfWeek()[weekday] && theAlarm.getHour() === h && m === theAlarm.getMinute()) {
 
-                    if (dayFlags[weekday]) {
+
+                var alarmFrequency = theAlarm.getFreq();
+                if(alarmFrequency > 0) {
+                    if(theAlarm.getDayFlags()[weekday])
                         continue;
-                    }
-                    else {
-                        tempAlarm.setDayFlags(weekday);
-                    }
+                    else
+                        theAlarm.setDayFlags(weekday);
                 }
 
-                // Create and Play Audio Object
-                document.getElementById('alarmFile').play();
-
-                // Name Editing
-                document.getElementById("alarmDialogueName").innerHTML = tempAlarm.getName();
-
-                // Modal
-                $('#alarmDialogueModal').modal({
-                    show: true
-                });
                 // Push alarm that is going off to wait-to-be-dismissed list
                 pendingDismissal.push(theAlarm);
                 triggerAlarm(theAlarm);
 
                 if(alarmFrequency === 0) {
-                    removeElementFromAlarmList(tempAlarm.getUUID());
+                    removeElementFromAlarmList(theAlarm.getUUID());
                     alarmList.splice(i, 1);
                     i--;
-                    this.storeAlarmsInCache();
                 }
+
             }
-            else {
-                newArray.push(tempAlarm);
-            }
+            //console.log("-------end checkAlarms-------");
         }
 
-        // Re-assign the Array of Alarms to remove any alarms that have gone off
-        // and shouldn't go off again
-        alarmList = newArray;
+        this.storeAlarmsInCache();
 
         // Restart the Function and check again
         if (alarmList.length > 0) {
@@ -143,7 +117,7 @@ var AlarmCoordinator = (function() {
      * been created during this session (and perhaps previous ones) in the cache
      */
     this.storeAlarmsInCache = function () {
-        console.log("AlarmCoordinator.storeAlarmsInCache :: storing alarms");
+        //console.log("AlarmCoordinator.storeAlarmsInCache :: storing alarms");
         localStorage.removeItem("alarms");
         if (alarmList !== null && alarmList.length > 0) {
             var toSave = JSON.stringify(alarmList);
@@ -251,7 +225,7 @@ var AlarmCoordinator = (function() {
 
         console.log("-----dismissAlarm-----");
         for(var i=0; i <pendingDismissal.length; i++) {
-            if(pendingDismissal[i].getUUID() == alarmID) {
+            if(pendingDismissal[i].getUUID() === alarmID) {
                 pendingDismissal.splice(i, 1);
                 return;
             }
