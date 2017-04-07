@@ -8,10 +8,16 @@ const DEFAULT_SNOOZE_MINUTES = 1;
 
 var AlarmCoordinator = (function() {
 
-    // Holds list of alarms to go off
+    // Holds list of all alarms to go off
     var alarmList = [];
 
+    // Single instance of AlarmCoordinator (singleton)
     var instance;
+
+    // "Mutex" Designed to Allow Alarms to Go Off Gracefully
+    // mutex = false, if No Alarm is in the process of going off
+    // mutex = true, if an alarm is currently in the process of going off
+    var mutex = false;
 
     // Holds alarms in the process of going off or being snoozed
     var pendingDismissal = [];
@@ -80,8 +86,6 @@ var AlarmCoordinator = (function() {
             // Conditional statement that checks whether the day, hour, and minute are
             // correct for the alarm to go off
             if(theAlarm.getDaysOfWeek()[weekday] && theAlarm.getHour() === h && m === theAlarm.getMinute()) {
-
-
                 var alarmFrequency = theAlarm.getFreq();
                 if(alarmFrequency > 0) {
                     if(theAlarm.getDayFlags()[weekday])
@@ -92,7 +96,6 @@ var AlarmCoordinator = (function() {
 
                 // Push alarm that is going off to wait-to-be-dismissed list
                 pendingDismissal.push(theAlarm);
-                triggerAlarm(theAlarm);
 
                 if(alarmFrequency === 0) {
                     removeElementFromAlarmList(theAlarm.getUUID());
@@ -104,13 +107,12 @@ var AlarmCoordinator = (function() {
             //console.log("-------end checkAlarms-------");
         }
 
+        this.gracefulAlarmTrigger();
         this.storeAlarmsInCache();
 
-        // Restart the Function and check again
-        if (alarmList.length > 0) {
-            setTimeout(this.checkAlarms, 500); //Check every half second
-        }
-    };
+        setTimeout(this.checkAlarms, 500); //Check every 0.5 seconds
+
+   };
 
     /**
      * If the alarm list is not empty or undefined, this function stores alarms that have
@@ -222,6 +224,7 @@ var AlarmCoordinator = (function() {
      * @param alarmID
      */
     this.dismissAlarm = function(alarmID) {
+        mutex = false;
 
         console.log("-----dismissAlarm-----");
         for(var i=0; i <pendingDismissal.length; i++) {
@@ -241,15 +244,41 @@ var AlarmCoordinator = (function() {
         console.log("-----snoozeAlarm-----");
         console.log(alarmID);
 
+        mutex = false;
+
         // Check to find the alarm to be snoozed
         for(var i=0; i <pendingDismissal.length; i++) {
-            // If the alarm is found, set a time out for the modal to appear
-            if(pendingDismissal[i].getUUID() == alarmID) {
-                setTimeout(function() { triggerAlarm(pendingDismissal[i]); }, DEFAULT_SNOOZE_MINUTES*60000);
+            // If the alarm is found, remove it from the pendingDismissal array temporarily
+            // and set a timeout to put it in the back of the array after a specified amount of time
+            if(pendingDismissal[i].getUUID() === alarmID) {
+                var rescheduledAlarm = pendingDismissal[i];
+                pendingDismissal.splice(i, 1);
+                setTimeout(function() { pendingDismissal.push(rescheduledAlarm); }, DEFAULT_SNOOZE_MINUTES*60000);
                 return;
             }
         }
 
+    };
+
+    /**
+     * This function works in tandem with the variable "mutex" to ensure
+     * graceful alarm triggering.
+     *
+     * Functionality
+     * 1a. Checks mutex to see that there is no alarm currently being triggered
+     * 1b Checks to make sure that pendingDismissal array isn't empty
+     * 2. If these conditions are met, the mutex is set to true
+     * 3. The first element of the pending dismissal array will be obtained
+     * and sent to the trigger function
+     * 4. The mutex will eventually be set back to false once the dismiss or snooze
+     * button is called
+     */
+    this.gracefulAlarmTrigger = function() {
+        if(!mutex && pendingDismissal.length > 0) {
+            mutex = true;
+            var nextAlarm = pendingDismissal[0]; // Get the first element of the array
+            setTimeout(function() { triggerAlarm(nextAlarm); }, 1000);
+        }
     };
 
     return AlarmCoordinator;
