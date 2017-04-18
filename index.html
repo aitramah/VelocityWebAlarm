@@ -13,9 +13,8 @@
     <link href="css/bootstrap.min.css" rel="stylesheet">
 
     <!--Velocity Alarm CSS-->
-    <link href="css/clock.css" rel="stylesheet">
     <link href="css/index.css" rel="stylesheet">
-
+    <link id="theme-css" href="css/main-theme/clock.css" rel="stylesheet">
 </head>
 
 <body>
@@ -34,13 +33,16 @@
 <!-- Main Body
 ================================================== -->
 
-<div class="container-fluid">
+<div id="main-background" class="container-fluid">
     <div class="row">
 
         <!--Clock-->
         <div id="clock-block" class="col-md-8">
+            <button id="main-theme-button" class="btn btn-primary theme-picker">Main</button>
+            <button id="dark-theme-button" class="btn btn-primary theme-picker">Dark</button>
+            <button id="orange-theme-button" class="btn btn-primary theme-picker">Orange</button>
             <button id="add-alarm-button" data-toggle="modal" data-target="#add-alarm-modal" type="button" class="btn btn-primary-transparent">
-                <img id="add-alarm-button-image" src="images/test-new-alarm-button.png" >
+                <img id="add-alarm-button-image" src="images/main-theme/test-new-alarm-button.png" >
             </button>
             <div id="date-and-clock">
                 <p id="date">Sunday, January 1st, 2017</p>
@@ -51,15 +53,13 @@
         <div class="col-md-4" id="alarm-block">
             <div class="panel panel-default">
                 <!-- Default panel contents -->
-                <div class="panel-heading"><h2>Alarm List</h2></div>
+                <div id='alarm-list-header' class="panel-heading"><h2>Alarm List</h2></div>
                 <!-- List group -->
                 <ul class="list-group" id="alarm-list">
                 </ul>
             </div>
         </div>
     </div>
-
-
 </div>
 <audio id="alarmFile" src="audio/alarm_sound.mp3" preload="auto"></audio>
 
@@ -67,7 +67,7 @@
 ================================================== -->
 <div class="modal fade" id="add-alarm-modal" tabindex="-1" role="dialog" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog" role="document">
-        <div class="modal-content">
+        <div id="modify-alarm-modal-content" class="modal-content">
             <div class="modal-header">
                 <button id="closeModal" type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
                 <h2 id="alarm-modal-title" class="modal-title" align="center">Add Alarm</h2>
@@ -183,6 +183,12 @@
 <script src="js/ui.js"></script>
 
 <script>
+    var theme = "main-theme";
+    var themeToButtonMap = {
+        "main-theme" : "btn-primary",
+        "dark-theme" : "btn-danger",
+        "orange-theme" : "btn-warning"
+    };
 
     //          Enable Modal
     $('#myModal').on('shown.bs.modal', function () {
@@ -193,8 +199,26 @@
     $(document).ready(startTime());
     $(document).ready(populateListUIFromArray(AlarmCoordinator().getAlarms()));
 
+    //          Connect theme buttons
+    $('#main-theme-button').click(function () {
+        updateTheme('main-theme');
+    });
+    $('#dark-theme-button').click(function () {
+        updateTheme('dark-theme');
+    });
+    $('#orange-theme-button').click(function () {
+        updateTheme('orange-theme');
+    });
 
+    function updateTheme(newTheme) {
+        theme = newTheme;
+        $('#theme-css').attr('href', "css/" + theme + "/clock.css");
+        $('#add-alarm-button-image').attr('src', "images/" + theme + "/test-new-alarm-button.png");
 
+        $('.btn').removeClass('btn-primary btn-danger btn-warning').addClass(themeToButtonMap[theme]);
+
+        populateListUIFromArray(AlarmCoordinator().getAlarms());
+    }
 </script>
 
 </body>

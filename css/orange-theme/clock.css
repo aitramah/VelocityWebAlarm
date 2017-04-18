@@ -1,0 +1,142 @@
+#clock {
+    font-family: Eurostile;
+    font-size: 500%;
+    text-align: center;
+    text-shadow: 5px, 5px;
+    width: 100%;
+    color: floralwhite;
+}
+
+#date {
+    font-family: Eurostile;
+    font-size: 120%;
+    text-align: center;
+    padding-top: 15%;
+    color: floralwhite;
+
+}
+
+#clock-block {
+    position: relative;
+    height : 90vh;
+    border-right: 1px solid #cecece;
+}
+
+#date-and-clock {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    width: 50%;
+    height: 60%;
+    margin: auto;
+}
+
+
+/* ---------- Fonts ---------- */
+@font-face {
+    font-family: Manifesto;
+}
+
+/* ---------- Navbar ---------- */
+.navbar-custom {
+    font-family: Manifesto;
+}
+
+.navbar {
+    margin-bottom: 0px;
+}
+
+/* ---------- Add Alarm Modal ---------- */
+.modal {
+    margin-top: 15%;
+}
+
+#add-alarm-body {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+#alarm-name-form-group {
+    margin-left: 15px;
+}
+
+.checkbox-inline {
+
+}
+
+/* ---------- Add Alarm List and Button ---------- */
+#add-alarm-button {
+    float : right;
+    margin-top: 10px;
+}
+
+#add-alarm-button-image {
+    width: 20px;
+    height: 20px;
+}
+
+#alarm-block {
+    background-color: darkorange;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+#alarm-heading {
+    color: floralwhite;
+}
+
+#alarm-subheading {
+    color: floralwhite;
+}
+
+.list-group-item {
+    background-color: darkorange;
+}
+
+.btn-primary-transparent {
+    background-color: transparent;
+    border-color: transparent;
+}
+
+#alarm-header {
+    padding-left: 8px;
+}
+
+.label {
+    margin-right: 4px;
+}
+
+.panel {
+    border-left: 0;
+    border-radius: 0;
+}
+
+#modify-alarm-button {
+    float: right;
+}
+
+#modify-alarm-button-image {
+    width: 20px;
+    height: 20px;
+}
+
+.close {
+    color: #fff;
+    opacity: 1;
+}
+
+#modify-alarm-modal-content {
+    background-color: darkorange;
+    color: floralwhite;
+}
+
+#main-background {
+    background-color: darkorange;
+}
+
+#alarm-list-header {
+    color: floralwhite;
+    background-color: orange;
+}

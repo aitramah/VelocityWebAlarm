@@ -46,21 +46,21 @@ function populateListUIFromArray(alarms) {
 
         if (alarmGUI === null) {
             //Add alarm to list
-            alarmList.append("<a href='#' class='list-group-item' id='" + alarm.getUUID() + "'>" +
+            alarmList.append("<div href='#' class='list-group-item' id='" + alarm.getUUID() + "'>" +
                 "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
                 "<button type='button' class='btn btn-primary-transparent' name='modifybutton' id='modify-alarm-button'>" +
-                "<img id='modify-alarm-button-image' src='images/edit-alarm-button.png'>" +
+                "<img id='modify-alarm-button-image' src='images/" + theme + "/edit-alarm-button.png'>" +
                 "<span class='pull-right'></span></button>" +
-                "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
-                "<h2 class='list-group-item-heading'>" + h + ":"+padTime(alarm.getMinute()) + suffix + "</h2>" +
-                stringOfLabels + "</a>");
+                "<h5 id='alarm-heading' class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
+                "<h2 id='alarm-subheading' class='list-group-item-heading alarm-subheading'>" + h + ":"+padTime(alarm.getMinute()) + suffix + "</h2>" +
+                stringOfLabels + "</div>");
         } else {
             alarmGUI.innerHTML = "<button type='button' class='close' name='closebutton' aria-label='Close'><span aria-hidden='true'>&times;</span></button>" +
                 "<button type='button' class='btn btn-primary-transparent' name='modifybutton' id='modify-alarm-button'>" +
-                "<img id='modify-alarm-button-image' src='images/edit-alarm-button.png'>" +
+                "<img id='modify-alarm-button-image' src='images/" + theme + "/edit-alarm-button.png'>" +
                 "<span class='pull-right'></span></button>" +
-                "<h5 class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
-                "<h2 class='list-group-item-heading'>" + h + ":" + padTime(alarm.getMinute()) + suffix + "</h2>" +
+                "<h5 id='alarm-heading' class='list-group-item-heading'>" + alarm.getName() + "</h5>" +
+                "<h2 id='alarm-subheading' class='list-group-item-heading'>" + h + ":" + padTime(alarm.getMinute()) + suffix + "</h2>" +
                 stringOfLabels;
         }
 
@@ -80,6 +80,7 @@ function triggerAlarm(alarm) {
     console.log("--------triggerAlarm--------");
 
     // Create and Play Audio Object
+    document.getElementById('alarmFile').currentTime = 0;
     document.getElementById('alarmFile').play();
 
     // Name Editing
@@ -99,7 +100,6 @@ function triggerAlarm(alarm) {
 
 
 // ------------ UI Event Listeners -------------- \\
-
 $(document).ready(function () {
     // Initialize Hours of Dropdown
     $(function () {
