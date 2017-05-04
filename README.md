@@ -1,8 +1,8 @@
 # VelocityWebAlarm
-A Web Alarm Clock applicaiton, the second platform for Velocity Alarms. Created for SENG 403 - Software Development in Teams and Organizations.
-By Aidan Bailey, Colin Thompson, Edrienne Manalastas, Fernando Valera, Daniel Velasco, Sharon Wong
+A Web Alarm Clock application, the second platform for Velocity Alarms. Created for SENG 403 - Software Development in Teams and Organizations.
+By Aidan Bailey, Colin Thompson, Edrienne Manalastas, Fernando Valera, Daniel Velasco, Sharon Wang
 
-Fullfills the Following Requirements/Functionality:
+Fulfills the Following Requirements/Functionality:
 * Shows current time
 * Create, Cancel, Edit, and Snooze Alarms
 * Manages multiple alarms in graceful fashion
